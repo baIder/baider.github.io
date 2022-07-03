@@ -1,0 +1,24 @@
+# CSS盒模型
+
+CSS盒模型将CSS中的元素整体视为一个盒子BOX，这个box由四个部分构成：
+- margin
+- border
+- padding
+- content
+
+CSS盒模型分两种
+- content-box
+- border-box
+
+## 区别
+
+区别主要在于width（或height）包含的范围。
+
+- content-box：`width`只控制`content`部分的`width`
+- border-box：`width`控制`border+padding+content`三部分的`width`
+
+由区别可知，若未指定`border`和`padding`，则两种盒模型并无区别。
+
+
+**通常情况下我们都会使用`border-box`因为该盒模型更好用。**
+因为`margin`会合并，对元素大小的影响比较小，而`border`和`padding`的大小已经包含在`width`中，因此`border-box`能够更直观的控制元素的大小，同时更符合border调试法的使用习惯。

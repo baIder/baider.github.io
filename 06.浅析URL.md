@@ -1,0 +1,48 @@
+# 浅析URL
+
+URL=Uniform Resource Locator
+
+## URL的构成
+
+URL = 协议 + 域名/IP + 端口 + 路径 + 查询参数 + 锚点
+
+## IP
+
+IP=Internet Protocol
+
+IP的作用：
+
+1. 定位一台设备
+2. 封装数据报文，以跟其他设备交流
+
+127.0.0.1表示本机，也可用localhost表示
+
+0.0.0.0不表示任何设备，约定俗成没有为什么
+
+### ping 命令的使用
+
+在命令行中使用`ping 域名/ip`
+
+## 端口
+
+可以理解为一台设备提供服务的窗口，不同的端口提供不同的服务，每台设备最多有65535个端口，其中0~1023号端口为系统端口，已经被定义，可在[WiKi](https://zh.wikipedia.org/wiki/TCP/UDP%E7%AB%AF%E5%8F%A3%E5%88%97%E8%A1%A8#0.E5.88.B01023.E5.8F.B7.E7.AB.AF.E5.8F.A3)中查看。
+
+## 域名
+
+域名，Domain Name，是对ip的别称，ip不利于记忆，域名应运而生，而DNS则将域名和ip联系起来
+
+### 域名的分级
+
+1. 顶级域名 .com .net等
+2. 二级域名（俗称一级域名） baidu.com google.com等
+3. 三级域名（俗称二级域名） www.baidu.com www.google.com等
+
+## DNS
+
+DNS=Domain Name System
+
+DNS的作用：将域名与对应到ip上，但需要注意一个域名可以对应多个ip，一个ip也可以对应多个域名
+
+### nslookup 命令的使用
+
+在命令行中使用`nslookup 域名`即可查看该域名对应的IP地址，可以为多个
