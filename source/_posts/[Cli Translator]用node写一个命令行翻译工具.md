@@ -1,6 +1,8 @@
 ---
 title: 用node写一个命令行翻译工具
 date: 2022-08-08 15:29:14
+categories:
+  - Node
 tags:
   - Node
 ---

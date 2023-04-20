@@ -1,6 +1,8 @@
 ---
 title: 发财图床 React懒加载和加载中
 date: 2022-08-13 15:29:14
+categories:
+  - 发财图床
 tags: 
   - React
 ---
