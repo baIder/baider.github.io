@@ -9,3 +9,8 @@ hexo new '文件名'
 ```bash
 hexo clean && hexo deploy
 ```
+
+## 预览
+```bash
+hexo server
+```
