@@ -29,8 +29,8 @@ dependencies:
     specifier: ^2.0.0
     version: 2.0.0
   hexo-renderer-markdown-it:
-    specifier: ^7.0.0
-    version: 7.0.0
+    specifier: ^7.1.0
+    version: 7.1.0
   hexo-renderer-stylus:
     specifier: ^2.1.0
     version: 2.1.0
@@ -926,8 +926,8 @@ packages:
       ejs: 3.1.9
     dev: false
 
-  /hexo-renderer-markdown-it@7.0.0:
-    resolution: {integrity: sha512-X+JDJ+FKGOvgGnJ1UW2AR13Ibltr/80IUbe2xh5u1hyCMKptAAhBHrhvRIqMR4WQuBgKOjQclyx4IHHY8u0n7w==}
+  /hexo-renderer-markdown-it@7.1.0:
+    resolution: {integrity: sha512-CQK7/kvhWbpKzXOSTpSuANVKgOZjPzxkPna4IQ6xMnRqsNpVXNSzpn5Ke1QEVH2x6FJB1/Vf7B40sJVxQKagaw==}
     engines: {node: '>=14'}
     dependencies:
       hexo-util: 3.0.1
