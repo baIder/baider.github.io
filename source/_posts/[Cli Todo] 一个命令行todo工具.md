@@ -2,9 +2,9 @@
 title: 一个命令行todo工具
 date: 2022-08-06 15:29:14
 categories:
-  - Node
+  - Node.js
 tags:
-  - Node
+  - Node.js
 ---
 
 # \[Cli Todo] 一个命令行todo工具

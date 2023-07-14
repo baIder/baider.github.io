@@ -4,7 +4,7 @@ date: 2023-06-28 15:42:16
 index_img: https://img.bald3r.wang/img/image-20230628145215603.png
 tags:
   - Node.js
-  - Nestjs
+  - NestJS
   - Redis
 ---
 ## 开发环境
