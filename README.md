@@ -14,3 +14,10 @@ hexo clean && hexo deploy
 ```bash
 hexo server
 ```
+
+
+## License
+
+[MIT](https://opensource.org/licenses/MIT)
+
+Copyright (c) 2023, baIder
