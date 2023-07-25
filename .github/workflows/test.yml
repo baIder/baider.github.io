@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    branches: [ "gh-pages" ]
+    branches: [ "master" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -41,7 +41,7 @@ jobs:
           # Remote port
           REMOTE_PORT: ${{ secrets.SSH_PORT }} # optional, default is 22
           # Source directory, path relative to `$GITHUB_WORKSPACE` root, eg: `dist/`
-          SOURCE: "" # optional, default is 
+          SOURCE: ".deploy_git" # optional, default is 
           # Target directory
           TARGET: ${{ secrets.SSH_TARGET }} # optional, default is 
           # Arguments to pass to rsync
