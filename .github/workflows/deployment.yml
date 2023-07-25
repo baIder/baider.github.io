@@ -7,17 +7,17 @@ on:
 
 jobs:
   hexo-deployment:
-  runs-on: ubuntu-latest
-  env:
-    TZ: Asia/Shanghai
-  steps:
-    - name: Connect Server
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        key: ${{ secrets.SSH_PASSWORD }}
-        port: ${{ secrets.SSH_PORT }}
-        script: |
-          cd 
-          touch test.txt
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Shanghai
+    steps:
+      - name: Connect Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd 
+            touch test.txt
