@@ -7,8 +7,6 @@ on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
     branches: [ "gh-pages" ]
-  pull_request:
-    branches: [ "master" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -25,11 +23,24 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
           
-      - name: Setup ENV
-        env: 
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: ${{ secrets.SSH_PORT }}
-        run: |
-          ssh $username@$host
+      - name: ssh deploy
+        # You may pin to the exact commit or the version.
+        # uses: easingthemes/ssh-deploy@3884c8554ff45c0fd37d3f12a76288d06ce7a2ff
+        uses: easingthemes/ssh-deploy@v4.1.8
+        with:
+          # Private key part of an SSH key pair
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
+          # Remote host
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          # Remote user
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          # Remote port
+          REMOTE_PORT: ${{ secrets.SSH_PORT }} # optional, default is 22
+          # Source directory, path relative to `$GITHUB_WORKSPACE` root, eg: `dist/`
+          SOURCE: "" # optional, default is 
+          # Target directory
+          TARGET: ${{ secrets.SSH_TARGET }} # optional, default is 
+          # Arguments to pass to rsync
+          ARGS: "-avzr --delete" # optional, default is -rlgoDzvc -i
+          # An array of ssh arguments, they must be prefixed with -o and separated by a comma, for example: -o SomeArgument=no, -o SomeOtherArgument=5 
+
