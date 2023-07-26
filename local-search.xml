@@ -945,6 +945,25 @@
   
   
   <entry>
+    <title>跨域</title>
+    <link href="/2022/06/24/17-%E8%B7%A8%E5%9F%9F/"/>
+    <url>/2022/06/24/17-%E8%B7%A8%E5%9F%9F/</url>
+    
+    <content type="html"><![CDATA[<h1>跨域</h1><h2 id="同源">同源</h2><p>源 = 协议 + 域名 + 端口号</p><p>如果两个 url 的<strong>协议</strong>、<strong>域名</strong>、<strong>端口号</strong>完全一致，那么这两个 url 就是同源的</p><h3 id="同源策略">同源策略</h3><p>浏览器规定如果 JS 运行在源 A 里，那么就只能获取源 A 的数据，不能获取源 B 的数据，即<strong>不允许跨域</strong></p><h2 id="如何实现跨域">如何实现跨域</h2><h3 id="CORS">CORS</h3><p>在被访问域名的响应头里写example.com可以访问</p><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">Access-Control-Allow-Origin: http:<span class="hljs-regexp">//</span>example.com<br></code></pre></td></tr></table></figure><p>这种做法被称为CORS跨域</p><h3 id="JSONP">JSONP</h3><p>浏览器不限制引用JS，那么我们就通过引用一个包含了数据的JS，就可以实现跨域请求数据，这种做法被称为JSONP跨域</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>浏览器</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Promise 与 回调 与 异步</title>
     <link href="/2022/06/24/16-Promise%E4%B8%8E%E5%BC%82%E6%AD%A5%E4%B8%8E%E5%9B%9E%E8%B0%83/"/>
     <url>/2022/06/24/16-Promise%E4%B8%8E%E5%BC%82%E6%AD%A5%E4%B8%8E%E5%9B%9E%E8%B0%83/</url>
@@ -964,25 +983,6 @@
       <tag>JS</tag>
       
     </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>跨域</title>
-    <link href="/2022/06/24/17-%E8%B7%A8%E5%9F%9F/"/>
-    <url>/2022/06/24/17-%E8%B7%A8%E5%9F%9F/</url>
-    
-    <content type="html"><![CDATA[<h1>跨域</h1><h2 id="同源">同源</h2><p>源 = 协议 + 域名 + 端口号</p><p>如果两个 url 的<strong>协议</strong>、<strong>域名</strong>、<strong>端口号</strong>完全一致，那么这两个 url 就是同源的</p><h3 id="同源策略">同源策略</h3><p>浏览器规定如果 JS 运行在源 A 里，那么就只能获取源 A 的数据，不能获取源 B 的数据，即<strong>不允许跨域</strong></p><h2 id="如何实现跨域">如何实现跨域</h2><h3 id="CORS">CORS</h3><p>在被访问域名的响应头里写example.com可以访问</p><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">Access-Control-Allow-Origin: http:<span class="hljs-regexp">//</span>example.com<br></code></pre></td></tr></table></figure><p>这种做法被称为CORS跨域</p><h3 id="JSONP">JSONP</h3><p>浏览器不限制引用JS，那么我们就通过引用一个包含了数据的JS，就可以实现跨域请求数据，这种做法被称为JSONP跨域</p>]]></content>
-    
-    
-    <categories>
-      
-      <category>浏览器</category>
-      
-    </categories>
-    
     
   </entry>
   
