@@ -111,6 +111,12 @@ deploy:
     repo: https://github.com/baIder/blog-deploy
     branch: main
 
+  - deploy:
+    type: rsync
+    host: ${env.HOST}
+    user: ${env.USER}
+    root: ${env.ROOT}
+
 markdown:
   preset: "default"
   render:
