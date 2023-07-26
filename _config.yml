@@ -107,10 +107,6 @@ deploy:
     # example, https://github.com/hexojs/hexojs.github.io
     branch: gh-pages
 
-  - type: git
-    repo: https://github.com/baIder/blog-deploy
-    branch: main
-
   - deploy:
     type: rsync
     host: ${env.HOST}
