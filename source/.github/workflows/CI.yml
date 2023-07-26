@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    branches: ["master"]
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -22,10 +22,6 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-
-      # - name: Switch branch
-      #   run: |
-      #     git checkout gh-pages
 
       - name: ssh deploy
         # You may pin to the exact commit or the version.
@@ -45,5 +41,3 @@ jobs:
           # Target directory
           TARGET: ${{ secrets.SSH_TARGET }} # optional, default is
           # Arguments to pass to rsync
-          # ARGS: "-avzr --delete" # optional, default is -rlgoDzvc -i
-          # An array of ssh arguments, they must be prefixed with -o and separated by a comma, for example: -o SomeArgument=no, -o SomeOtherArgument=5
