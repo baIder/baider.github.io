@@ -1,0 +1,772 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Allen">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="[XR-Frame]微信小程序XR简单踩坑记录 前言 工作中需要写一个微信小程序，利用XR-Frame框架展示模型，由于先前没有接触过threejs，知识储备匮乏，只能通过官方文档进行学习，记录踩坑历程 项目初始化 mockdata 先准备好测试用的虚拟数据 1234567891011121314151617181920212223242526272829export const mockData">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信小程序XR简单踩坑记录">
+<meta property="og:url" content="https://bald3r.wang/2023/01/23/50-XR-Frame-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8FXR%E7%AE%80%E5%8D%95%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="冷面杀手的个人站">
+<meta property="og:description" content="[XR-Frame]微信小程序XR简单踩坑记录 前言 工作中需要写一个微信小程序，利用XR-Frame框架展示模型，由于先前没有接触过threejs，知识储备匮乏，只能通过官方文档进行学习，记录踩坑历程 项目初始化 mockdata 先准备好测试用的虚拟数据 1234567891011121314151617181920212223242526272829export const mockData">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202304111101724.png">
+<meta property="og:image" content="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202304111103956.png">
+<meta property="og:image" content="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202304111114394.png">
+<meta property="og:image" content="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202304111104094.png">
+<meta property="og:image" content="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202304111109759.png">
+<meta property="og:image" content="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202304111110297.png">
+<meta property="og:image" content="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202304111158632.png">
+<meta property="og:image" content="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202304111119144.png">
+<meta property="og:image" content="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202304111119024.png">
+<meta property="article:published_time" content="2023-01-23T07:29:14.000Z">
+<meta property="article:modified_time" content="2023-07-12T07:33:20.234Z">
+<meta property="article:author" content="Allen">
+<meta property="article:tag" content="微信小程序">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202304111101724.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>微信小程序XR简单踩坑记录 - 冷面杀手的个人站</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/container.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"bald3r.wang","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"52c1d1fe05a91aa7d0310b884bf35aee","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+    <!-- Baidu Analytics -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?52c1d1fe05a91aa7d0310b884bf35aee";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Hi there!</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/JS-CSS-demos/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>demos</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="微信小程序XR简单踩坑记录"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-01-23 15:29" pubdate>
+          2023年1月23日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          41 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">微信小程序XR简单踩坑记录</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1>[XR-Frame]微信小程序XR简单踩坑记录</h1>
+<h1>前言</h1>
+<p>工作中需要写一个微信小程序，利用XR-Frame框架展示模型，由于先前没有接触过threejs，知识储备匮乏，只能通过官方文档进行学习，记录踩坑历程</p>
+<h1>项目初始化</h1>
+<h2 id="mockdata">mockdata</h2>
+<p>先准备好测试用的虚拟数据</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs json">export const mockData = <span class="hljs-punctuation">[</span><br>  <span class="hljs-punctuation">&#123;</span><br>    id<span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;miku&quot;</span><span class="hljs-punctuation">,</span><br>    image<span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;/assets/tencent.jpg&quot;</span><span class="hljs-punctuation">,</span><br>    model<span class="hljs-punctuation">:</span><br>      <span class="hljs-string">&quot;https://mmbizwxaminiprogram-1258344707.cos.ap-guangzhou.myqcloud.com/xr-frame/demo/miku.glb&quot;</span><span class="hljs-punctuation">,</span><br>    scale<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">0.08</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0.08</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0.08</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    rotation<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">0</span><span class="hljs-punctuation">,</span> <span class="hljs-number">180</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    position<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">0</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-punctuation">&#123;</span><br>    id<span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;lifangti&quot;</span><span class="hljs-punctuation">,</span><br>    image<span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;/assets/lanqiu.jpg&quot;</span><span class="hljs-punctuation">,</span><br>    model<span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;/assets/box.glb&quot;</span><span class="hljs-punctuation">,</span><br>    scale<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">0.6</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0.6</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0.6</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    rotation<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">0</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    position<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">0</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-punctuation">&#123;</span><br>    id<span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;helmet&quot;</span><span class="hljs-punctuation">,</span><br>    image<span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;/assets/beizi.jpg&quot;</span><span class="hljs-punctuation">,</span><br>    model<span class="hljs-punctuation">:</span><br>      <span class="hljs-string">&quot;https://mmbizwxaminiprogram-1258344707.cos.ap-guangzhou.myqcloud.com/xr-frame/demo/damage-helmet/index.glb&quot;</span><span class="hljs-punctuation">,</span><br>    scale<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">0.3</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0.3</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0.3</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    rotation<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">0</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span> <span class="hljs-number">180</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    position<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">0</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br><span class="hljs-punctuation">]</span>;<br><br></code></pre></td></tr></table></figure>
+<h2 id="app-json">app.json</h2>
+<p>在创建项目时，一定要记得在<code>app.json</code>加上一行配置：<code>&quot;lazyCodeLoading&quot;: &quot;requiredComponents&quot;</code>，非常容易忽视。</p>
+<p><img src="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202304111101724.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202304111103956.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="TS类型提示">TS类型提示</h2>
+<p>如果使用了TS，那么会发现新创建的项目中所有的api都是没有类型提示的，但是在微信官方的demo中却有，只需要将<a target="_blank" rel="noopener" href="https://github.com/dtysky/xr-frame-demo/blob/master/typings/types/wx/xr-frame.d.ts" title="官方demo中的类型声明文件">官方demo中的类型声明文件</a>复制到我们自己的项目中即可。</p>
+<p><img src="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202304111114394.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="component-json">component.json</h2>
+<p>在组件中，也要设置<code>renderer</code>为<code>xr-frame</code>。</p>
+<p><img src="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202304111104094.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="组件使用">组件使用</h2>
+<p>此处文档中在使用组件<code>xr-start</code>时，传入了<code>width</code>和<code>height</code>，区别于<code>style</code>中的<code>width</code>和<code>height</code>，作为<code>props</code>的宽高决定了渲染的宽高，可以理解为分辨率，此处的宽高越大，渲染出来的精细度越高，反之，越低就越糊。</p>
+<p><img src="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202304111109759.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h1>编写组件</h1>
+<h2 id="wxml">wxml</h2>
+<p>文档中已经明确指出，模板中只能存在一个<code>&lt;xr-scene&gt;&lt;/xr-scene&gt;</code>标签。</p>
+<p><img src="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202304111110297.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>像光源、摄像机等基础概念文档中已有描述，在此不再赘述。</p>
+<h2 id="Element-与-Component">Element 与 Component</h2>
+<p>XR-Frame中有很多的元素Element，Element下面会挂载很多的Component，具体功能的实现都是靠Component</p>
+<p>创建Element：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">const</span> xrFrameSystem = wx.<span class="hljs-title function_">getXrFrameSystem</span>();<br>scene.<span class="hljs-title function_">createElement</span>(xrFrameSystem.<span class="hljs-property">XRNode</span>);<br></code></pre></td></tr></table></figure>
+<p><code>xrFrameSystem.XRNode</code>中的XRNode就是一个元素，所有以XR开头的都是元素，例如<code>XRARTracker</code>、<code>XRGLTF</code>等</p>
+<p>创建一个Element后，会有默认挂载的Component，可以通过API文档查询到</p>
+<p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/api/xr-frame/classes/XRGLTF.html" title="Class: XRGLTF | 微信开放文档 (qq.com)">Class: XRGLTF | 微信开放文档 (qq.com)</a></p>
+<p><img src="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202304111158632.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>增加、删除Component：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-title class_">Element</span>.<span class="hljs-title function_">addComponent</span>(xrFrameSystem.<span class="hljs-property">xxx</span>,&#123;...options&#125;)<br><span class="hljs-title class_">Element</span>.<span class="hljs-title function_">removeComponent</span>(xrFrameSystem.<span class="hljs-property">xxx</span>)<br></code></pre></td></tr></table></figure>
+<h2 id="动态载入资源">动态载入资源</h2>
+<p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/xr-frame/assets/" title="资源系统 | 微信开放文档 (qq.com)">资源系统 | 微信开放文档 (qq.com)</a></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs typescript">scene.<span class="hljs-property">assets</span>.<span class="hljs-title function_">loadAsset</span>(&#123;<br>  <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;gltf&quot;</span>,<br>  <span class="hljs-attr">assetId</span>: i.<span class="hljs-property">id</span>,<br>  <span class="hljs-attr">src</span>: i.<span class="hljs-property">model</span>,<br>  <span class="hljs-attr">options</span>: &#123;&#125;,<br>&#125;);<br></code></pre></td></tr></table></figure>
+<h2 id="多个ARTracker">多个ARTracker</h2>
+<p>通过ARTracker可以识别图像，demo中通过在wxml中添加标签的方式添加ARTracker，优点是方便易懂，但是不能动态添加，往往我们需要根据后端返回的数据，动态添加ARTracker</p>
+<p><img src="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202304111119144.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202304111119024.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>想要在<code>xr-frame</code>中添加元素，必须要用到**<code>shadow-node</code>**</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">xr-scene</span> <span class="hljs-attr">ar-system</span>=<span class="hljs-string">&quot;modes:Marker&quot;</span> <span class="hljs-attr">bind:ready</span>=<span class="hljs-string">&quot;handleReady&quot;</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">xr-light</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;ambient&quot;</span> <span class="hljs-attr">color</span>=<span class="hljs-string">&quot;1 1 1&quot;</span> <span class="hljs-attr">intensity</span>=<span class="hljs-string">&quot;1&quot;</span> /&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">xr-light</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;directional&quot;</span> <span class="hljs-attr">rotation</span>=<span class="hljs-string">&quot;40 70 0&quot;</span> <span class="hljs-attr">color</span>=<span class="hljs-string">&quot;1 1 1&quot;</span> <span class="hljs-attr">intensity</span>=<span class="hljs-string">&quot;3&quot;</span> <span class="hljs-attr">cast-shadow</span> /&gt;</span><br><br>  <span class="hljs-tag">&lt;<span class="hljs-name">xr-shadow</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;shadow-node&quot;</span> /&gt;</span><br><br>  <span class="hljs-tag">&lt;<span class="hljs-name">xr-camera</span> <span class="hljs-attr">clear-color</span>=<span class="hljs-string">&quot;0.4 0.8 0.6 1&quot;</span> <span class="hljs-attr">background</span>=<span class="hljs-string">&quot;ar&quot;</span> <span class="hljs-attr">is-ar-camera</span> /&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">xr-scene</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>先在页面中准备好一个<code>shadow-node</code>，设置好<code>id</code>，然后通过js获取</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">const</span> xrFrameSystem = wx.<span class="hljs-title function_">getXrFrameSystem</span>();<br><span class="hljs-keyword">const</span> shadow = scene.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;shadow-node&quot;</span>);<br></code></pre></td></tr></table></figure>
+<p>然后通过循环创建ARTracker，并添加到<code>shadow-node</code>下即可</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">const</span> arTracker = scene.<span class="hljs-title function_">createElement</span>(xrFrameSystem.<span class="hljs-property">XRARTracker</span>, &#123;<br>    <span class="hljs-attr">mode</span>: <span class="hljs-string">&quot;Marker&quot;</span>,<br>    <span class="hljs-attr">src</span>: i.<span class="hljs-property">image</span>,  <span class="hljs-comment">//i为mockdata中的一项，这里绑定了识别图像为i.image</span><br>&#125;);<br>shadow.<span class="hljs-title function_">addChild</span>(arTracker);<br></code></pre></td></tr></table></figure>
+<p>绑定了识别图像后，还需要绑定识别成功后显示的模型，我这里使用<code>xr-node</code>作为模型挂载的节点，大家可以吧<code>xr-node</code>理解成<code>div</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">const</span> node = scene.<span class="hljs-title function_">createElement</span>(xrFrameSystem.<span class="hljs-property">XRNode</span>);<br><br>arTracker.<span class="hljs-title function_">addChild</span>(node);<br><br><span class="hljs-keyword">const</span> nodeComp = node.<span class="hljs-title function_">getComponent</span>(xrFrameSystem.<span class="hljs-property">Transform</span>);<br><br><span class="hljs-comment">//下面是给node加上node-id，并设置模型的比例，位置，旋转</span><br>nodeComp.<span class="hljs-title function_">setData</span>(&#123; <span class="hljs-attr">nodeId</span>: i.<span class="hljs-property">id</span> &#125;);<br>nodeComp.<span class="hljs-property">scale</span>.<span class="hljs-title function_">setArray</span>(i.<span class="hljs-property">scale</span>);<br>nodeComp.<span class="hljs-property">position</span>.<span class="hljs-title function_">setArray</span>(i.<span class="hljs-property">position</span>);<br>nodeComp.<span class="hljs-property">rotation</span>.<span class="hljs-title function_">setArray</span>(i.<span class="hljs-property">rotation</span>);<br><br><span class="hljs-keyword">const</span> gltfElement = scene.<span class="hljs-title function_">createElement</span>(xrFrameSystem.<span class="hljs-property">XRGLTF</span>);<br>node.<span class="hljs-title function_">addChild</span>(gltfElement);<br><br><span class="hljs-keyword">const</span> gltfComp = gltfElement.<span class="hljs-title function_">getComponent</span>(xrFrameSystem.<span class="hljs-property">GLTF</span>);<br><br>gltfComp.<span class="hljs-title function_">setData</span>(&#123;<br>  <span class="hljs-attr">model</span>: scene.<span class="hljs-property">assets</span>.<span class="hljs-title function_">getAsset</span>(<span class="hljs-string">&quot;gltf&quot;</span>, i.<span class="hljs-property">id</span>),<br>&#125;);<br><br>gltfElement<br>.<span class="hljs-title function_">getComponent</span>(xrFrameSystem.<span class="hljs-property">Animator</span>)<br>.<span class="hljs-title function_">setData</span>(&#123; <span class="hljs-attr">autoPlay</span>: &#123;&#125; &#125;);<br><br></code></pre></td></tr></table></figure>
+<p>到这里需要识别的图像和识别成功后对应展示的模型已经绑定好了，笔者这里还有额外的需求，即点击对应模型，弹出模型展示页，因此需要增加和模型的交互。这里有一个大坑。</p>
+<h2 id="添加模型交互">添加模型交互</h2>
+<p>要给模型添加交互，需要先给模型加上体积，并绑定事件</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs typescript">gltfElement.<span class="hljs-title function_">addComponent</span>(xrFrameSystem.<span class="hljs-property">CubeShape</span>, &#123;<br>    <span class="hljs-attr">autoFit</span>: <span class="hljs-literal">true</span>,<br>&#125;);<br><br>gltfComp.<span class="hljs-property">el</span>.<span class="hljs-property">event</span>.<span class="hljs-title function_">add</span>(<span class="hljs-string">&quot;touch-shape&quot;</span>, <span class="hljs-function">() =&gt;</span> &#123;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">triggerEvent</span>(<span class="hljs-string">&quot;onModelTapped&quot;</span>, i.<span class="hljs-property">id</span>);<br>&#125;);<br></code></pre></td></tr></table></figure>
+<h2 id="放置模型">放置模型</h2>
+<p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/xr-frame/#%E8%99%9A%E6%8B%9F-x-%E7%8E%B0%E5%AE%9E%EF%BC%8C%E8%BF%BD%E5%8A%A0-AR-%E8%83%BD%E5%8A%9B" title="开始 | 微信开放文档 (qq.com)">开始 | 微信开放文档 (qq.com)</a></p>
+<p>原理大同小异，也是通过<code>shadow-node</code>添加元素即可。记得添加<code>node</code>时要先将<code>visible</code>设置为<code>false</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">const</span> xrFrameSystem = wx.<span class="hljs-title function_">getXrFrameSystem</span>();<br><span class="hljs-keyword">const</span> shadow = scene.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;shadow-node&quot;</span>);<br><span class="hljs-keyword">const</span> node = (<span class="hljs-variable language_">this</span>.<span class="hljs-property">data</span>.<span class="hljs-property">node</span> = scene.<span class="hljs-title function_">createElement</span>(xrFrameSystem.<span class="hljs-property">XRNode</span>, &#123;<br>    <span class="hljs-attr">visible</span>: <span class="hljs-string">&quot;false&quot;</span>, <span class="hljs-comment">//默认为false，并且只能为字符串。</span><br>&#125;));<br><br>shadow.<span class="hljs-title function_">addChild</span>(node);<br><br><span class="hljs-keyword">const</span> gltfElement = scene.<span class="hljs-title function_">createElement</span>(xrFrameSystem.<span class="hljs-property">XRGLTF</span>);<br>node.<span class="hljs-title function_">addChild</span>(gltfElement);<br><span class="hljs-keyword">const</span> gltfComp = gltfElement.<span class="hljs-title function_">getComponent</span>(xrFrameSystem.<span class="hljs-property">GLTF</span>);<br>gltfComp.<span class="hljs-title function_">setData</span>(&#123; <span class="hljs-attr">model</span>: loadedAsset &#125;);<br>gltfElement.<span class="hljs-title function_">getComponent</span>(xrFrameSystem.<span class="hljs-property">Animator</span>).<span class="hljs-title function_">setData</span>(&#123; <span class="hljs-attr">autoPlay</span>: &#123;&#125; &#125;);<br><br></code></pre></td></tr></table></figure>
+<p>点击放置时，会触发<code>placeHere</code>方法，后面的<code>true</code>就是将上面的<code>visible: &quot;false&quot;</code>中的<code>visible</code>设置为了<code>true</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-variable language_">this</span>.<span class="hljs-property">data</span>.<span class="hljs-property">scene</span>.<span class="hljs-property">event</span>.<span class="hljs-title function_">add</span>(<span class="hljs-string">&quot;touchstart&quot;</span>, <span class="hljs-function">() =&gt;</span> &#123;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">data</span>.<span class="hljs-property">scene</span>.<span class="hljs-property">ar</span>.<span class="hljs-title function_">placeHere</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">data</span>.<span class="hljs-property">node</span>, <span class="hljs-literal">true</span>);<br>&#125;);<br></code></pre></td></tr></table></figure>
+<h2 id="node-id在哪设置">node-id在哪设置</h2>
+<p>找了好大一圈才知道，nodeId是要在<code>xrFrameSystem.Transform</code>这个Component中设置的。</p>
+<p>通过这个组件设置的值可以在<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/api/xr-frame/interfaces/ITransformData.html" title="文档">文档</a>中查到，但是非常难找到</p>
+<h1>后记</h1>
+<p>微信的这个框架目前还处于beta状态，网上相关的资料也少，文档的描述个人感觉还是比较难懂的，希望笔者的文章能给大家带来一点帮助。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">#微信小程序</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>微信小程序XR简单踩坑记录</div>
+      <div>https://bald3r.wang/2023/01/23/50-XR-Frame-微信小程序XR简单踩坑记录/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Allen</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年1月23日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/01/23/49-%E5%9C%A8VueRouter%E4%B8%AD%E4%BD%BF%E7%94%A8Pinia/" title="在VueRouter中使用Pinia">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">在VueRouter中使用Pinia</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/08/20/46-%E5%A4%A7%E5%B1%8F%E5%8F%AF%E8%A7%86%E5%8C%96-%E7%94%A8REM%E9%80%82%E9%85%8D%E5%90%84%E5%B0%BA%E5%AF%B8%E5%B1%8F%E5%B9%95/" title="大屏可视化 用REM适配各尺寸屏幕">
+                        <span class="hidden-mobile">大屏可视化 用REM适配各尺寸屏幕</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

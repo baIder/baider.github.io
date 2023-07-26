@@ -1,0 +1,887 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Allen">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="NestJS 入门（三）用户登录与JWT 前言 本文主要探讨在 NestJS 中实现登录功能并签发 JWT Token ，使用的库有：   node.bcrypt.js   passport.js   @nestjs&#x2F;jwt   加密用户密码 目前我们的数据库中的密码是明文存储的，明显是极不安全的，因此我们这里使用第三方库来对密码进行加密，然后再存入数据库中。 首先我们安装库： 12pnpm i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NestJS 入门（三）用户登录与JWT">
+<meta property="og:url" content="https://bald3r.wang/2023/07/14/NestJS-%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%89%EF%BC%89%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E4%B8%8EJWT/index.html">
+<meta property="og:site_name" content="冷面杀手的个人站">
+<meta property="og:description" content="NestJS 入门（三）用户登录与JWT 前言 本文主要探讨在 NestJS 中实现登录功能并签发 JWT Token ，使用的库有：   node.bcrypt.js   passport.js   @nestjs&#x2F;jwt   加密用户密码 目前我们的数据库中的密码是明文存储的，明显是极不安全的，因此我们这里使用第三方库来对密码进行加密，然后再存入数据库中。 首先我们安装库： 12pnpm i">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img.bald3r.wang/img/20230712153658.png">
+<meta property="article:published_time" content="2023-07-14T07:25:41.000Z">
+<meta property="article:modified_time" content="2023-07-14T07:30:52.110Z">
+<meta property="article:author" content="Allen">
+<meta property="article:tag" content="Node.js">
+<meta property="article:tag" content="NestJS">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img.bald3r.wang/img/20230712153658.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>NestJS 入门（三）用户登录与JWT - 冷面杀手的个人站</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/container.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"bald3r.wang","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"52c1d1fe05a91aa7d0310b884bf35aee","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+    <!-- Baidu Analytics -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?52c1d1fe05a91aa7d0310b884bf35aee";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Hi there!</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/JS-CSS-demos/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>demos</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="NestJS 入门（三）用户登录与JWT"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-14 15:25" pubdate>
+          2023年7月14日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          19k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          157 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">NestJS 入门（三）用户登录与JWT</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1>NestJS 入门（三）用户登录与JWT</h1>
+<h2 id="前言">前言</h2>
+<p>本文主要探讨在 NestJS 中实现登录功能并签发 JWT Token ，使用的库有：</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>node.bcrypt.js</p>
+</li>
+<li class="lvl-2">
+<p>passport.js</p>
+</li>
+<li class="lvl-2">
+<p>@nestjs/jwt</p>
+</li>
+</ul>
+<h2 id="加密用户密码">加密用户密码</h2>
+<p>目前我们的数据库中的密码是明文存储的，明显是极不安全的，因此我们这里使用第三方库来对密码进行加密，然后再存入数据库中。</p>
+<p>首先我们安装库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">pnpm i -S bcrypt <br>pnpm i -D @types/bcrypt<br></code></pre></td></tr></table></figure>
+<p>前端会将用户的<code>username</code>和<code>password</code>传给后端，然后后端再将<code>password</code>进行加密，最后存入数据库。TypeORM 提供一个装饰器<code>@BeforeInsert</code>，它的功能是在数据插入数据库前执行一个函数，符合我们现在的需求。因此接下来我们需要修改<code>user.entity.ts</code>：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-comment">// user.entity.ts</span><br><br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">BeforeInsert</span>, ... , <span class="hljs-title class_">PrimaryGeneratedColumn</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;typeorm&#x27;</span>;<br><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> bcrypt <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;bcrypt&#x27;</span>;<br><br><span class="hljs-meta">@Entity</span>()<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">User</span> &#123;<br>  <span class="hljs-meta">@PrimaryGeneratedColumn</span>()<br>  <span class="hljs-attr">id</span>: <span class="hljs-built_in">number</span>;<br><br>	...<br><br>  <span class="hljs-meta">@BeforeInsert</span>()<br>  <span class="hljs-keyword">async</span> <span class="hljs-title function_">hashPassword</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">password</span>) <span class="hljs-variable language_">this</span>.<span class="hljs-property">password</span> = bcrypt.<span class="hljs-title function_">hashSync</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">password</span>, <span class="hljs-number">10</span>);<br>  &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>此时我们重新创建一个用户：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl --location --request POST <span class="hljs-string">&#x27;http://localhost:3000/user/&#x27;</span> \<br>--data-urlencode <span class="hljs-string">&#x27;username=袁洋&#x27;</span> \<br>--data-urlencode <span class="hljs-string">&#x27;password=123456&#x27;</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;code&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;message&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;请求成功&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;data&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;username&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;袁洋&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;password&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;$2b$10$Q4Ra7wjNSBCMVKHtbRUf4.rc.jr.wXSvolAI8IAJppUU8LB0AMgvW&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">13</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;created_at&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2023-07-13T00:51:13.030Z&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;updated_at&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2023-07-13T00:51:13.030Z&quot;</span><br>    <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+<p>查看数据库：</p>
+<img src="https://img.bald3r.wang/img/image-20230713165229514.png" srcset="/img/loading.gif" lazyload alt="image-20230713165229514" style="zoom:50%;" />
+<p>可以看到数据库中的密码字段也已经更新。</p>
+<p>细心的读者可能会发现，返回的数据中包含<code>password</code>字段，而大多数情况下不需要返回这个字段，因此需要剔除。</p>
+<p>剔除有两种方法：</p>
+<ol>
+<li class="lvl-3">
+<p>拿到用户数据后，剔除<code>password</code>字段，再将其他字段返回。</p>
+</li>
+<li class="lvl-3">
+<p>从数据库中读取用户数据时，就不读取<code>password</code>字段。</p>
+</li>
+</ol>
+<p>本文选择第二种方式。</p>
+<p>修改<code>user.entity.ts</code>：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs ts">...<br><br><span class="hljs-meta">@Entity</span>()<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">User</span> &#123;<br>  <span class="hljs-meta">@PrimaryGeneratedColumn</span>()<br>  <span class="hljs-attr">id</span>: <span class="hljs-built_in">number</span>;<br><br>  <span class="hljs-meta">@Column</span>(&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;account&#x27;</span>, <span class="hljs-attr">unique</span>: <span class="hljs-literal">true</span> &#125;)<br>  <span class="hljs-attr">username</span>: <span class="hljs-built_in">string</span>;<br><br>  <span class="hljs-meta">@Column</span>(&#123; <span class="hljs-attr">select</span>: <span class="hljs-literal">false</span> &#125;)     <span class="hljs-comment">// 增加了 select: false</span><br>  <span class="hljs-attr">password</span>: <span class="hljs-built_in">string</span>;<br><br>	...<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>该选项会在查表时跳过当前字段。</p>
+<p>测试效果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl --location --request GET <span class="hljs-string">&#x27;http://localhost:3000/user/1&#x27;</span><br></code></pre></td></tr></table></figure>
+<p>响应：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;code&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;message&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;请求成功&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;data&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;username&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;孙明&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;created_at&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2023-07-12T23:53:01.321Z&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;updated_at&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2023-07-12T23:53:01.321Z&quot;</span><br>    <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+<p>可以看到结果中已经没有<code>password</code>字段。</p>
+<h2 id="登录接口">登录接口</h2>
+<p><code>passport.js</code>是 Node.js 中非常著名的一个用于做身份认证的包，它主要依靠策略（Strategy）来进行验证，因此我们还需要一个策略。在本次实践中，我们实现的是本地身份验证，因此我们使用<code>passport-local</code>这个策略。</p>
+<p>安装依赖：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">pnpm i -S @nestjs/passport passport passport-local<br>pnpm i -D @types/passport @types/passport-local <br></code></pre></td></tr></table></figure>
+<p>创建策略文件，由于 NestJS 并没有提供创建策略文件的命令，因此我们需要手动创建文件：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-comment">// /src/global/strategy/local.strategy.ts</span><br><br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">PassportStrategy</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/passport&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Strategy</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;passport-local&#x27;</span>;<br><span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> &#123; <span class="hljs-title class_">IStrategyOptions</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;passport-local&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">InjectRepository</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/typeorm&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Repository</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;typeorm&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; compareSync &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;bcrypt&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">BadRequestException</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/common&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">User</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;src/user/entities/user.entity&#x27;</span>;<br><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">LocalStrategy</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">PassportStrategy</span>(<span class="hljs-title class_">Strategy</span>) &#123;		<span class="hljs-comment">// 此处的 Strategy 要引入 passport-local 中的 </span><br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span><br><span class="hljs-params">    <span class="hljs-meta">@InjectRepository</span>(User) <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> userRepository: Repository&lt;User&gt;,	<span class="hljs-comment">// 将 user 实体注入进来</span></span><br><span class="hljs-params">  </span>) &#123;<br>    <span class="hljs-variable language_">super</span>(&#123;<br>      <span class="hljs-attr">usernameField</span>: <span class="hljs-string">&#x27;username&#x27;</span>,	<span class="hljs-comment">// 固定写法，指定用户名字段，可以为 phone 或 email 等其他字段，不影响</span><br>      <span class="hljs-attr">passwordField</span>: <span class="hljs-string">&#x27;password&#x27;</span>,	<span class="hljs-comment">// 固定写法，指定密码字段</span><br>    &#125; <span class="hljs-keyword">as</span> <span class="hljs-title class_">IStrategyOptions</span>);<br>  &#125;<br><br>  <span class="hljs-keyword">async</span> <span class="hljs-title function_">validate</span>(<span class="hljs-attr">username</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">password</span>: <span class="hljs-built_in">string</span>): <span class="hljs-title class_">Promise</span>&lt;<span class="hljs-built_in">any</span>&gt; &#123;		<span class="hljs-comment">// 必须实现一个 validate 方法</span><br>    <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">userRepository</span><br>      .<span class="hljs-title function_">createQueryBuilder</span>(<span class="hljs-string">&#x27;user&#x27;</span>)<br>      .<span class="hljs-title function_">addSelect</span>(<span class="hljs-string">&#x27;user.password&#x27;</span>)<br>      .<span class="hljs-title function_">where</span>(<span class="hljs-string">&#x27;user.username=:username&#x27;</span>, &#123; username &#125;)<br>      .<span class="hljs-title function_">getOne</span>();<br><br>    <span class="hljs-keyword">if</span> (!user) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BadRequestException</span>(<span class="hljs-string">&#x27;用户不存在&#x27;</span>);<br><br>    <span class="hljs-keyword">if</span> (!<span class="hljs-title function_">compareSync</span>(password, user.<span class="hljs-property">password</span>))<br>      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BadRequestException</span>(<span class="hljs-string">&#x27;密码错误&#x27;</span>);<br><br>    <span class="hljs-keyword">return</span> user;<br>  &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>这里我们导出了一个类<code>LocalStrategy</code>，继承自<code>PassportStrategy</code>，这个类首先需要指明两个字段<code>usernameField</code>和<code>passwordField</code>，一般来说用户登录都会提供至少两个字段，例如用户名（username）和密码（password），或者电子邮箱（email）和密码（password）等等，我们需要告知我们的策略，从请求的<code>body</code>中取哪两个字段用于验证。在本例中，我们使用的是<code>username</code>和<code>password</code>。</p>
+<p>策略还必须实现一个方法<code>validate()</code>，这个方法会接受我们上面指定的两个字段作为参数，然后就需要查表，查出用户名对应的密码，进行比较。</p>
+<p><strong>注意，由于我们在实体中设置了<code>password</code>字段的 <code>select : false</code>，因此我们使用<code>find()</code>方法是不会返回<code>password</code>字段的，因此我们需要使用<code>createQueryBuilder()</code>方法创建一个查询命令，再通过<code>addSelect()</code>方法手动将<code>password</code>字段添加上，这样查询到的数据中就会包含我们所需的<code>password</code>字段。</strong></p>
+<p>创建好了策略，我们还需要一个登录接口，一般来说我们的登录地址为<code>/auth/login</code>，因此我们创建对应的文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">nest g mo auth   <br>nest g co auth<br></code></pre></td></tr></table></figure>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-comment">// auth.module.ts</span><br><br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Module</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/common&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">AuthController</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./auth.controller&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">LocalStrategy</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;src/global/strategy/local.strategy&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">TypeOrmModule</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/typeorm&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">User</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;src/user/entities/user.entity&#x27;</span>;<br><br><span class="hljs-meta">@Module</span>(&#123;<br>  <span class="hljs-attr">imports</span>: [<span class="hljs-title class_">TypeOrmModule</span>.<span class="hljs-title function_">forFeature</span>([<span class="hljs-title class_">User</span>])],<br>  <span class="hljs-attr">controllers</span>: [<span class="hljs-title class_">AuthController</span>],<br>  <span class="hljs-attr">providers</span>: [<span class="hljs-title class_">LocalStrategy</span>],<br>&#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AuthModule</span> &#123;&#125;<br><br><span class="hljs-comment">// auth.controller.ts</span><br><br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Controller</span>, <span class="hljs-title class_">Post</span>, <span class="hljs-title class_">UseGuards</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/common&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">AuthGuard</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/passport&#x27;</span>;<br><br><span class="hljs-meta">@Controller</span>(<span class="hljs-string">&#x27;auth&#x27;</span>)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AuthController</span> &#123;<br>  <span class="hljs-meta">@UseGuards</span>(<span class="hljs-title class_">AuthGuard</span>(<span class="hljs-string">&#x27;local&#x27;</span>))<br>  <span class="hljs-meta">@Post</span>(<span class="hljs-string">&#x27;login&#x27;</span>)<br>  <span class="hljs-title function_">login</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;login&#x27;</span>;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>测试一下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl --location --request POST <span class="hljs-string">&#x27;http://localhost:3000/auth/login&#x27;</span> \<br>--header <span class="hljs-string">&#x27;Content-Type: application/x-www-form-urlencoded&#x27;</span> \<br>--data-urlencode <span class="hljs-string">&#x27;username=wang&#x27;</span> \<br>--data-urlencode <span class="hljs-string">&#x27;password=123456&#x27;</span><br></code></pre></td></tr></table></figure>
+<p>响应成功：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;code&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;message&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;请求成功&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;data&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;login&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+<p>响应失败：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-comment">// 用户名输入错误</span><br><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;code&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">400</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;message&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;用户不存在&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br><br><span class="hljs-comment">// 密码输入错误</span><br><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;code&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">400</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;message&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;密码错误&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+<h2 id="签发-JWT-Token">签发 JWT Token</h2>
+<p>一般来说，登录成功之后会有两种记录登录状态的方式，一种是 Session ，一种是 Token ，本例中使用 JWT Token 。关于 JWT Token ，我也写了<a href="https://bald3r.wang/2023/05/18/%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E4%B8%8EJWT/">一篇文章</a>，感兴趣的读者可以移步<a href="https://bald3r.wang/">我的博客</a>查看。</p>
+<p>安装依赖：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">pnpm i -S @nestjs/jwt<br></code></pre></td></tr></table></figure>
+<p>修改<code>auth</code>模块：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Module</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/common&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">AuthController</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./auth.controller&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">LocalStrategy</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;src/global/strategy/local.strategy&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">TypeOrmModule</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/typeorm&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">User</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;src/user/entities/user.entity&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">JwtModule</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/jwt&#x27;</span>;<br><br><span class="hljs-keyword">const</span> jwtModule = <span class="hljs-title class_">JwtModule</span>.<span class="hljs-title function_">register</span>(&#123;<br>  <span class="hljs-attr">secret</span>: <span class="hljs-string">&#x27;suibianshenme&#x27;</span>,<br>  <span class="hljs-attr">signOptions</span>: &#123; <span class="hljs-attr">expiresIn</span>: <span class="hljs-string">&#x27;4h&#x27;</span> &#125;,<br>&#125;);<br><br><span class="hljs-meta">@Module</span>(&#123;<br>  <span class="hljs-attr">imports</span>: [<span class="hljs-title class_">TypeOrmModule</span>.<span class="hljs-title function_">forFeature</span>([<span class="hljs-title class_">User</span>]), jwtModule],<br>  <span class="hljs-attr">controllers</span>: [<span class="hljs-title class_">AuthController</span>],<br>  <span class="hljs-attr">providers</span>: [<span class="hljs-title class_">LocalStrategy</span>],<br>  <span class="hljs-attr">exports</span>: [jwtModule],<br>&#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AuthModule</span> &#123;&#125;<br><br></code></pre></td></tr></table></figure>
+<p>添加<code>auth.service.ts</code>，分离登录逻辑：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nest g service auth<br></code></pre></td></tr></table></figure>
+<p>修改<code>auth.controller.ts</code>：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Controller</span>, <span class="hljs-title class_">Post</span>, <span class="hljs-title class_">Req</span>, <span class="hljs-title class_">UseGuards</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/common&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">AuthGuard</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/passport&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">AuthService</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./auth.service&#x27;</span>;<br><span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> &#123; <span class="hljs-title class_">Request</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;express&#x27;</span>;<br><br><span class="hljs-meta">@Controller</span>(<span class="hljs-string">&#x27;auth&#x27;</span>)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AuthController</span> &#123;<br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> authService: AuthService</span>) &#123;&#125;<br>  <span class="hljs-meta">@UseGuards</span>(<span class="hljs-title class_">AuthGuard</span>(<span class="hljs-string">&#x27;local&#x27;</span>))<br>  <span class="hljs-meta">@Post</span>(<span class="hljs-string">&#x27;login&#x27;</span>)<br>  <span class="hljs-title function_">login</span>(<span class="hljs-params"><span class="hljs-meta">@Req</span>() req: Request</span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">authService</span>.<span class="hljs-title function_">login</span>(req.<span class="hljs-property">user</span>);<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这里的<code>req.user</code>是我们的策略<code>local.strategy.ts</code>，最后验证成功后<code>return user</code>挂载上去的。</p>
+<p>修改<code>auth.service.ts</code>：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Injectable</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/common&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">JwtService</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/jwt&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">User</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;src/user/entities/user.entity&#x27;</span>;<br><br><span class="hljs-meta">@Injectable</span>()<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AuthService</span> &#123;<br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> jwtService: JwtService</span>) &#123;&#125;<br><br>  <span class="hljs-keyword">async</span> <span class="hljs-title function_">login</span>(<span class="hljs-params">user: Partial&lt;User&gt;</span>) &#123;<br>    <span class="hljs-keyword">const</span> payload = &#123; <span class="hljs-attr">username</span>: user.<span class="hljs-property">username</span>, <span class="hljs-attr">id</span>: user.<span class="hljs-property">id</span> &#125;;<br><br>    <span class="hljs-keyword">const</span> access_token = <span class="hljs-variable language_">this</span>.<span class="hljs-property">jwtService</span>.<span class="hljs-title function_">sign</span>(payload);<br><br>    <span class="hljs-keyword">return</span> &#123;<br>      access_token,<br>      <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Bearer&#x27;</span>,<br>    &#125;;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>测试一下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl --location --request POST <span class="hljs-string">&#x27;http://localhost:3000/auth/login&#x27;</span> \<br>--header <span class="hljs-string">&#x27;Content-Type: application/x-www-form-urlencoded&#x27;</span> \<br>--data-urlencode <span class="hljs-string">&#x27;username=wang&#x27;</span> \<br>--data-urlencode <span class="hljs-string">&#x27;password=123456&#x27;</span><br></code></pre></td></tr></table></figure>
+<p>响应：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;code&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;message&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;请求成功&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;data&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;access_token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndhbmciLCJpZCI6MTQsImlhdCI6MTY4OTMwNjc0NywiZXhwIjoxNjg5MzIxMTQ3fQ.QrV8vjQatf7KYaM6fwckNSuNC2A08IUFyGkJzMehzaw&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Bearer&quot;</span><br>    <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+<p>至此，实现签发 JWT token 。</p>
+<h2 id="验证-JWT-Token">验证 JWT Token</h2>
+<p>用户在请求需要身份验证的接口时，会在请求的<code>headers</code>中增加一个字段<code>Authorization : Bearer &#123;token&#125;</code>，接下来我们就从请求头中取出 token 并进行验证。</p>
+<p>我们使用的<code>passport.js</code>也提供了相应的策略<code>passport-jwt</code>，帮助我们进行验证。</p>
+<p>安装依赖：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">pnpm i -S passport-jwt<br>pnpm i -D @types/passport-jwt<br></code></pre></td></tr></table></figure>
+<p>创建新的策略：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-comment">// /src/global/strategy/jwt.strategy.ts</span><br><br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">PassportStrategy</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/passport&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">InjectRepository</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/typeorm&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Repository</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;typeorm&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">ExtractJwt</span>, <span class="hljs-title class_">Strategy</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;passport-jwt&#x27;</span>;<br><span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> &#123; <span class="hljs-title class_">StrategyOptions</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;passport-jwt&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Injectable</span>, <span class="hljs-title class_">UnauthorizedException</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/common&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">User</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;src/user/entities/user.entity&#x27;</span>;<br><br><span class="hljs-meta">@Injectable</span>()<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">JwtStrategy</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">PassportStrategy</span>(<span class="hljs-title class_">Strategy</span>) &#123;		<span class="hljs-comment">// 这里的 Strategy 必须是 passport-jwt 包中的</span><br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span><br><span class="hljs-params">    <span class="hljs-meta">@InjectRepository</span>(User) <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> userRepository: Repository&lt;User&gt;,</span><br><span class="hljs-params">  </span>) &#123;<br>    <span class="hljs-variable language_">super</span>(&#123;<br>      <span class="hljs-attr">jwtFromRequest</span>: <span class="hljs-title class_">ExtractJwt</span>.<span class="hljs-title function_">fromAuthHeaderAsBearerToken</span>(),<br>      <span class="hljs-attr">secretOrKey</span>: <span class="hljs-string">&#x27;suibianshenme&#x27;</span>,<br>    &#125; <span class="hljs-keyword">as</span> <span class="hljs-title class_">StrategyOptions</span>);<br>  &#125;<br><br>  <span class="hljs-keyword">async</span> <span class="hljs-title function_">validate</span>(<span class="hljs-params">payload: User</span>) &#123;<br>    <span class="hljs-keyword">const</span> existUser = <span class="hljs-keyword">await</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">userRepository</span>.<span class="hljs-title function_">findOne</span>(&#123;<br>      <span class="hljs-attr">where</span>: &#123; <span class="hljs-attr">id</span>: payload.<span class="hljs-property">id</span> &#125;,<br>    &#125;);<br><br>    <span class="hljs-keyword">if</span> (!existUser) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">UnauthorizedException</span>(<span class="hljs-string">&#x27;token验证失败&#x27;</span>);<br><br>    <span class="hljs-keyword">return</span> existUser;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>策略的内容与<code>local</code>策略基本一致，通过包提供的<code>ExtractJwt.fromAuthHeaderAsBearerToken()</code>方法可以自动从<code>headers</code>中提取<code>Authorization</code>中的 token ，并且会自动去除开头的<code>Bearer </code>前缀。注意这里的<code>secretOrKey</code>需要和签发时的<code>secret</code>一致。</p>
+<p>策略必须实现一个方法<code>validate()</code>，其中的参数<code>payload</code>是我们签发的 JWT Token 中的<code>payload</code>部分：</p>
+<img src="https://img.bald3r.wang/img/image-20230714135538574.png" srcset="/img/loading.gif" lazyload alt="image-20230714135538574" style="zoom:50%;" />
+<p>所以<code>payload</code>这里其实是一个对象，包含了<code>username</code>和<code>id</code>字段。</p>
+<p>创建好策略后，我们还需要注册这个策略。</p>
+<p>例如我们给获取用户信息接口<code>GET /user/&#123;id&#125;</code>加入 Token 验证：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-comment">// user.module.ts</span><br><br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Module</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/common&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">UserService</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./user.service&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">UserController</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./user.controller&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">TypeOrmModule</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/typeorm&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">User</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./entities/user.entity&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">JwtStrategy</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;src/global/strategy/jwt.strategy&#x27;</span>;<br><br><span class="hljs-meta">@Module</span>(&#123;<br>  <span class="hljs-attr">imports</span>: [<span class="hljs-title class_">TypeOrmModule</span>.<span class="hljs-title function_">forFeature</span>([<span class="hljs-title class_">User</span>])],<br>  <span class="hljs-attr">controllers</span>: [<span class="hljs-title class_">UserController</span>],<br>  <span class="hljs-attr">providers</span>: [<span class="hljs-title class_">UserService</span>, <span class="hljs-title class_">JwtStrategy</span>],	<span class="hljs-comment">// 将策略加入 providers 数组</span><br>&#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UserModule</span> &#123;&#125;<br><br><span class="hljs-comment">// user.controller.ts</span><br><br><span class="hljs-keyword">import</span> &#123;<br>  ...,<br>  <span class="hljs-title class_">UseGuards</span>,<br>&#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/common&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">AuthGuard</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/passport&#x27;</span>;<br><br><span class="hljs-meta">@Controller</span>(<span class="hljs-string">&#x27;user&#x27;</span>)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UserController</span> &#123;<br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> userService: UserService</span>) &#123;&#125;<br>  <br>  ...<br><br>  <span class="hljs-meta">@UseGuards</span>(<span class="hljs-title class_">AuthGuard</span>(<span class="hljs-string">&#x27;jwt&#x27;</span>))<br>  <span class="hljs-meta">@Get</span>(<span class="hljs-string">&#x27;:id&#x27;</span>)<br>  <span class="hljs-title function_">findOne</span>(<span class="hljs-params"><span class="hljs-meta">@Param</span>(<span class="hljs-string">&#x27;id&#x27;</span>) id: <span class="hljs-built_in">string</span></span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">userService</span>.<span class="hljs-title function_">findOne</span>(+id);<br>  &#125;<br><br>	...<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>测试一下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl --location --request GET <span class="hljs-string">&#x27;http://localhost:3000/user/1&#x27;</span> <br></code></pre></td></tr></table></figure>
+<p>请求失败：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;code&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">401</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;message&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Unauthorized&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+<p>我们先登录，然后将得到的 JWT Token 加入到<code>headers</code>中，重新请求：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl --location --request GET <span class="hljs-string">&#x27;http://localhost:3000/user/1&#x27;</span> \<br>--header <span class="hljs-string">&#x27;Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndhbmciLCJpZCI6MTQsImlhdCI6MTY4OTMxNDY3NywiZXhwIjoxNjg5MzI5MDc3fQ.KMXnv3X_CIZHwRdnFxMPIbs_H5_mMKpE3oDqcMICWh8&#x27;</span> <br></code></pre></td></tr></table></figure>
+<p>请求成功：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;code&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;message&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;请求成功&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;data&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;username&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;孙明&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;created_at&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2023-07-12T23:53:01.321Z&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;updated_at&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2023-07-12T23:53:01.321Z&quot;</span><br>    <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+<p>但是如果对每个接口都加一个<code>@UseGuard(AuthGuard('jwt'))</code>显然是繁琐且重复的，绝大多数接口都是需要验证身份的，只有诸如登录一类的接口是不需要认证的，因此我们下一步就是全局注册。</p>
+<h2 id="将-Token-验证应用到全局">将 Token 验证应用到全局</h2>
+<p>首先我们需要理清思路：</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>现有的<code>AuthGuard('jwt')</code>无法满足需求，我们需要定制</p>
+</li>
+<li class="lvl-2">
+<p>有个别接口不需要验证，需要排除/标记</p>
+</li>
+</ul>
+<h3 id="做排除">做排除</h3>
+<p>我们可以维护一个白名单，在策略中验证请求的 url 是否在白名单中，如果是则跳过验证。这里笔者就不展开了。</p>
+<h3 id="做标记">做标记</h3>
+<p>我们自定义一个装饰器<code>@Public</code>来标记接口是否为公共接口，所有被标记的接口都可以不需要身份验证。</p>
+<p>在<code>/src/global/decorator</code>目录下创建一个<code>public.decorator.ts</code>：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">SetMetadata</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/common&#x27;</span>;<br><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">IS_PUBLIC_KEY</span> = <span class="hljs-string">&#x27;isPublic&#x27;</span>;<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">Public</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title class_">SetMetadata</span>(<span class="hljs-variable constant_">IS_PUBLIC_KEY</span>, <span class="hljs-literal">true</span>);<br></code></pre></td></tr></table></figure>
+<p>这里主要是使用了<code>SetMetadata()</code>方法，给接口设置了一个元数据（Metadata）<code>isPublic : true</code></p>
+<p>然后给接口加上这个标记：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-comment">// auth.controller.ts</span><br><br>...<br><br><span class="hljs-meta">@Controller</span>(<span class="hljs-string">&#x27;auth&#x27;</span>)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AuthController</span> &#123;<br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> authService: AuthService</span>) &#123;&#125;<br>  <span class="hljs-meta">@Public</span>()<br>  <span class="hljs-meta">@UseGuards</span>(<span class="hljs-title class_">AuthGuard</span>(<span class="hljs-string">&#x27;local&#x27;</span>))<br>  <span class="hljs-meta">@Post</span>(<span class="hljs-string">&#x27;login&#x27;</span>)<br>  <span class="hljs-title function_">login</span>(<span class="hljs-params"><span class="hljs-meta">@Req</span>() req: Request</span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">authService</span>.<span class="hljs-title function_">login</span>(req.<span class="hljs-property">user</span>);<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>删除我们之前加在<code>user.controller.ts</code>中的代码：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-comment">// user.controller.ts</span><br><br><span class="hljs-keyword">import</span> &#123;<br>  ...,<br>  <span class="hljs-title class_">UseGuards</span>,<br>&#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/common&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">AuthGuard</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/passport&#x27;</span>;<br><br><span class="hljs-meta">@Controller</span>(<span class="hljs-string">&#x27;user&#x27;</span>)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UserController</span> &#123;<br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> userService: UserService</span>) &#123;&#125;<br>  <br>  ...<br><br><span class="hljs-comment">//@UseGuards(AuthGuard(&#x27;jwt&#x27;))</span><br>  <span class="hljs-meta">@Get</span>(<span class="hljs-string">&#x27;:id&#x27;</span>)<br>  <span class="hljs-title function_">findOne</span>(<span class="hljs-params"><span class="hljs-meta">@Param</span>(<span class="hljs-string">&#x27;id&#x27;</span>) id: <span class="hljs-built_in">string</span></span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">userService</span>.<span class="hljs-title function_">findOne</span>(+id);<br>  &#125;<br><br>	...<br><br></code></pre></td></tr></table></figure>
+<h3 id="定制一个-Guard">定制一个 Guard</h3>
+<blockquote>
+<p>在 Nest.js 中，Guard（守卫）是一种用于保护路由和执行权限验证的特殊类型组件。它允许您在请求到达路由处理程序之前对请求进行拦截，并根据特定条件来允许或拒绝请求的访问。</p>
+<p>Guard 可以用于实现各种身份验证和授权策略，例如基于角色的访问控制、JWT 验证、OAuth 认证等。它们可以在路由级别或处理程序级别应用，以确保请求的安全性和合法性。</p>
+<p>Guard 类必须实现 <code>CanActivate</code> 接口，并实现 <code>canActivate()</code> 方法来定义守卫的逻辑。在该方法中，您可以根据请求的特征、用户信息、权限等进行验证，并返回一个布尔值来表示是否允许请求继续执行。</p>
+</blockquote>
+<p>在<code>/src/global/guard</code>目录下创建一个<code>jwt-auth.guard.ts</code>：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> &#123; <span class="hljs-title class_">ExecutionContext</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/common&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Injectable</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/common&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">AuthGuard</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/passport&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Reflector</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/core&#x27;</span>;<br><span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> &#123; <span class="hljs-title class_">Observable</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;rxjs&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-variable constant_">IS_PUBLIC_KEY</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../decorator/public.decorator&#x27;</span>;<br><br><span class="hljs-meta">@Injectable</span>()<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">JwtAuthGuard</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">AuthGuard</span>(<span class="hljs-string">&#x27;jwt&#x27;</span>) &#123;<br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> reflector: Reflector</span>) &#123;<br>    <span class="hljs-variable language_">super</span>();<br>  &#125;<br><br>  <span class="hljs-title function_">canActivate</span>(<br>    <span class="hljs-attr">context</span>: <span class="hljs-title class_">ExecutionContext</span>,<br>  ): <span class="hljs-built_in">boolean</span> | <span class="hljs-title class_">Promise</span>&lt;<span class="hljs-built_in">boolean</span>&gt; | <span class="hljs-title class_">Observable</span>&lt;<span class="hljs-built_in">boolean</span>&gt; &#123;<br>    <span class="hljs-keyword">const</span> isPublic = <span class="hljs-variable language_">this</span>.<span class="hljs-property">reflector</span>.<span class="hljs-property">getAllAndOverride</span>&lt;<span class="hljs-built_in">boolean</span>&gt;(<span class="hljs-variable constant_">IS_PUBLIC_KEY</span>, [<br>      context.<span class="hljs-title function_">getHandler</span>(),<br>      context.<span class="hljs-title function_">getClass</span>(),<br>    ]);<br><br>    <span class="hljs-keyword">if</span> (isPublic) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">super</span>.<span class="hljs-title function_">canActivate</span>(context);<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这里的 Guard 必须实现一个<code>canActive()</code>方法，本例中，我们通过<code>Reflector</code>拿到了通过装饰器设置的元数据<code>isPublic</code>，如果其为<code>true</code>，继续执行请求的逻辑，如果为<code>false</code>，将请求传递给其他代码执行。</p>
+<p>在<code>app.module.ts</code>中注册这个 Guard：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Module</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/common&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">AppService</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./app.service&#x27;</span>;<br>...<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">JwtAuthGuard</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./global/guard/jwt-auth.guard&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-variable constant_">APP_GUARD</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/core&#x27;</span>;<br><br><span class="hljs-meta">@Module</span>(&#123;<br>  ...<br>  <span class="hljs-attr">providers</span>: [<br>    <span class="hljs-title class_">AppService</span>,<br>    &#123;<br>      <span class="hljs-attr">provide</span>: <span class="hljs-variable constant_">APP_GUARD</span>,<br>      <span class="hljs-attr">useClass</span>: <span class="hljs-title class_">JwtAuthGuard</span>,<br>    &#125;,<br>  ],<br>&#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AppModule</span> &#123;&#125;<br></code></pre></td></tr></table></figure>
+<p>这时我们重新请求<code>GET /user/&#123;id&#125;</code>和<code>GET /user</code>，都会提示未验证，但是我们请求<code>POST /auth/login</code>是没问题的，至此 JWT 验证部分就结束了。</p>
+<h2 id="环境变量">环境变量</h2>
+<p>截至目前，我们的项目中有两个敏感信息是明文写在代码中的，一个是我们连接数据库的信息，一个是我们签发 JWT Token 的密钥。出于安全性考虑，我们一般会将这些数据写在环境变量中，让我们的代码运行时从环境变量中读取。</p>
+<p>创建<code>.env.local</code>文件，用于本地开发，创建<code>.env.prod</code>用于生产环境，这里以<code>.env.local</code>为例：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-comment">// .env.local</span><br><br><span class="hljs-variable constant_">DB_HOST</span>=localhost<br><span class="hljs-variable constant_">DB_PORT</span>=<span class="hljs-number">3306</span><br><span class="hljs-variable constant_">DB_USERNAME</span>=root<br><span class="hljs-variable constant_">DB_PASSWORD</span>=<span class="hljs-number">123456</span><br><span class="hljs-variable constant_">DB_DATABASE</span>=nest-demo<br><br><span class="hljs-variable constant_">JWT_SECRET</span>=superNB<br><span class="hljs-variable constant_">JWT_EXPIRES_IN</span>=10m<br></code></pre></td></tr></table></figure>
+<p>在根目录<code>/</code>下新建<code>config</code>目录，用来存放我们读取环境变量的代码，并在该目录下创建文件<code>envConfig.ts</code>：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-comment">// envConfig.ts</span><br><br><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> fs <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:fs&#x27;</span><br><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> path <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:path&#x27;</span><br><br><span class="hljs-keyword">const</span> isProd = process.<span class="hljs-property">env</span>.<span class="hljs-property">NODE_ENV</span> === <span class="hljs-string">&#x27;production&#x27;</span><br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">parseEnv</span>(<span class="hljs-params"></span>) &#123;<br>  <span class="hljs-keyword">const</span> localEnv = path.<span class="hljs-title function_">resolve</span>(<span class="hljs-string">&#x27;.env.local&#x27;</span>)<br>  <span class="hljs-keyword">const</span> prodEnv = path.<span class="hljs-title function_">resolve</span>(<span class="hljs-string">&#x27;.env.prod&#x27;</span>)<br><br>  <span class="hljs-keyword">if</span> (!fs.<span class="hljs-title function_">existsSync</span>(localEnv) &amp;&amp; !fs.<span class="hljs-title function_">existsSync</span>(prodEnv))<br>    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;缺少环境配置文件&#x27;</span>)<br><br>  <span class="hljs-keyword">const</span> filePath = isProd &amp;&amp; fs.<span class="hljs-title function_">existsSync</span>(prodEnv) ? prodEnv : localEnv<br>  <span class="hljs-keyword">return</span> &#123; <span class="hljs-attr">path</span>: filePath &#125;<br>&#125;<br><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">parseEnv</span>()<br></code></pre></td></tr></table></figure>
+<p>安装依赖：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">pnpm i -S @nestjs/config<br></code></pre></td></tr></table></figure>
+<p>然后在<code>app.module.ts</code>中全局注册我们的<code>config</code>：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-comment">// app.module.ts</span><br><br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Module</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/common&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">ConfigModule</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/config&#x27;</span>;<br><span class="hljs-keyword">import</span> envConfig <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;config/envConfig&#x27;</span>;<br>...<br><br><span class="hljs-meta">@Module</span>(&#123;<br>  <span class="hljs-attr">imports</span>: [<br>    <span class="hljs-title class_">ConfigModule</span>.<span class="hljs-title function_">forRoot</span>(&#123;<br>      <span class="hljs-attr">isGlobal</span>: <span class="hljs-literal">true</span>,<br>      <span class="hljs-attr">envFilePath</span>: [envConfig.<span class="hljs-property">path</span>],<br>    &#125;),<br>  ...<br>  ],<br>  ...<br>&#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AppModule</span> &#123;&#125;<br></code></pre></td></tr></table></figure>
+<p>然后也是在<code>app.module.ts</code>中将我们数据库信息替换成环境变量中读取的信息：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-comment">// app.module.ts</span><br><br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Module</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/common&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">TypeOrmModule</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/typeorm&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">ConfigModule</span>, <span class="hljs-title class_">ConfigService</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/config&#x27;</span>;<br>...<br><br><span class="hljs-meta">@Module</span>(&#123;<br>  <span class="hljs-attr">imports</span>: [<br>    ...<br>    <span class="hljs-title class_">TypeOrmModule</span>.<span class="hljs-title function_">forRootAsync</span>(&#123;<br>      <span class="hljs-attr">imports</span>: [<span class="hljs-title class_">ConfigModule</span>],<br>      <span class="hljs-attr">inject</span>: [<span class="hljs-title class_">ConfigService</span>],<br>      <span class="hljs-attr">useFactory</span>: <span class="hljs-keyword">async</span> (<span class="hljs-attr">configService</span>: <span class="hljs-title class_">ConfigService</span>) =&gt; (&#123;<br>        <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;mysql&#x27;</span>,<br>        <span class="hljs-attr">host</span>: configService.<span class="hljs-property">get</span>&lt;<span class="hljs-built_in">string</span>&gt;(<span class="hljs-string">&#x27;DB_HOST&#x27;</span>) ?? <span class="hljs-string">&#x27;localhost&#x27;</span>,<br>        <span class="hljs-attr">port</span>: configService.<span class="hljs-property">get</span>&lt;<span class="hljs-built_in">number</span>&gt;(<span class="hljs-string">&#x27;DB_PORT&#x27;</span>) ?? <span class="hljs-number">3306</span>,<br>        <span class="hljs-attr">username</span>: configService.<span class="hljs-property">get</span>&lt;<span class="hljs-built_in">string</span>&gt;(<span class="hljs-string">&#x27;DB_USERNAME&#x27;</span>) ?? <span class="hljs-string">&#x27;root&#x27;</span>,<br>        <span class="hljs-attr">password</span>: configService.<span class="hljs-property">get</span>&lt;<span class="hljs-built_in">string</span>&gt;(<span class="hljs-string">&#x27;DB_PASSWORD&#x27;</span>) ?? <span class="hljs-string">&#x27;123456&#x27;</span>,<br>        <span class="hljs-attr">database</span>: configService.<span class="hljs-property">get</span>&lt;<span class="hljs-built_in">string</span>&gt;(<span class="hljs-string">&#x27;DB_DATABASE&#x27;</span>) ?? <span class="hljs-string">&#x27;nest-demo&#x27;</span>,<br>        <span class="hljs-attr">synchronize</span>: <span class="hljs-literal">true</span>,<br>        <span class="hljs-attr">retryDelay</span>: <span class="hljs-number">500</span>,<br>        <span class="hljs-attr">retryAttempts</span>: <span class="hljs-number">10</span>,<br>        <span class="hljs-attr">autoLoadEntities</span>: <span class="hljs-literal">true</span>,<br>      &#125;),<br>    &#125;),<br>  ],<br>  ...<br>&#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AppModule</span> &#123;&#125;<br></code></pre></td></tr></table></figure>
+<p>将原本代码中签发和验证 JWT 处的密钥进行替换：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-comment">// /src/auth/auth.module.ts</span><br><br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">JwtModule</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/jwt&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">ConfigService</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/config&#x27;</span>;<br>...<br><br><span class="hljs-keyword">const</span> jwtModule = <span class="hljs-title class_">JwtModule</span>.<span class="hljs-title function_">registerAsync</span>(&#123;<br>  <span class="hljs-attr">inject</span>: [<span class="hljs-title class_">ConfigService</span>],<br>  <span class="hljs-attr">useFactory</span>: <span class="hljs-keyword">async</span> (<span class="hljs-attr">configService</span>: <span class="hljs-title class_">ConfigService</span>) =&gt; (&#123;<br>    <span class="hljs-attr">secret</span>: configService.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;JWT_SECRET&#x27;</span>) ?? <span class="hljs-string">&#x27;secret&#x27;</span>,<br>    <span class="hljs-attr">signOptions</span>: &#123;<br>      <span class="hljs-attr">expiresIn</span>: configService.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;JWT_EXPIRES_IN&#x27;</span>) ?? <span class="hljs-string">&#x27;10m&#x27;</span>,<br>    &#125;,<br>  &#125;),<br>&#125;);<br>...<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AuthModule</span> &#123;&#125;<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-comment">// /src/global/strategy/jwt.strategy.ts</span><br><br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">PassportStrategy</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/passport&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">ExtractJwt</span>, <span class="hljs-title class_">Strategy</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;passport-jwt&#x27;</span>;<br><span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> &#123; <span class="hljs-title class_">StrategyOptions</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;passport-jwt&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Injectable</span>, <span class="hljs-title class_">UnauthorizedException</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/common&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">ConfigService</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/config&#x27;</span>;<br>...<br><br><span class="hljs-meta">@Injectable</span>()<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">JwtStrategy</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">PassportStrategy</span>(<span class="hljs-title class_">Strategy</span>) &#123;<br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span><br><span class="hljs-params">    ...</span><br><span class="hljs-params">    <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> configService: ConfigService,</span><br><span class="hljs-params">  </span>) &#123;<br>    <span class="hljs-variable language_">super</span>(&#123;<br>      <span class="hljs-attr">jwtFromRequest</span>: <span class="hljs-title class_">ExtractJwt</span>.<span class="hljs-title function_">fromAuthHeaderAsBearerToken</span>(),<br>      <span class="hljs-attr">secretOrKey</span>: configService.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;JWT_SECRET&#x27;</span>) ?? <span class="hljs-string">&#x27;secret&#x27;</span>,<br>    &#125; <span class="hljs-keyword">as</span> <span class="hljs-title class_">StrategyOptions</span>);<br>  &#125;<br><br>  ...<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<h2 id="后记">后记</h2>
+<p>笔者也是刚刚接触 Node ，目前还存在诸多不足，如果文章中有任何错误，欢迎在评论区批评指正。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/baIder/nest-demo">Nest学习系列博客代码仓库 (github.com)</a></p>
+<p><a href="https://bald3r.wang/">冷面杀手的个人站 (bald3r.wang)</a></p>
+<p><a href="https://bald3r.wang/tags/NestJS/">NestJS 相关文章</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Node-js/" class="category-chain-item">Node.js</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Node-js/NestJS/" class="category-chain-item">NestJS</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Node-js/">#Node.js</a>
+      
+        <a href="/tags/NestJS/">#NestJS</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>NestJS 入门（三）用户登录与JWT</div>
+      <div>https://bald3r.wang/2023/07/14/NestJS-入门（三）用户登录与JWT/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Allen</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年7月14日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/25/Symbol%E7%94%A8%E6%B3%95/" title="ES6 Symbol 用法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ES6 Symbol 用法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/14/NestJS-%E5%85%A5%E9%97%A8%EF%BC%88%E4%BA%8C%EF%BC%89%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE%E5%8F%8A%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/" title="NestJS 入门（二）格式化响应数据及错误处理">
+                        <span class="hidden-mobile">NestJS 入门（二）格式化响应数据及错误处理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
