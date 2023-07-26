@@ -16,24 +16,27 @@
   <meta name="author" content="Allen">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Promise 与 回调 与 异步 异步与回调 关联 异步任务需要在得到结果时通知 JS 来拿结果 可以让 JS 留一个函数地址(电话号码)给浏览器，异步任务完成时浏览器调用该函数地址即可(拨打电话)，同时把结果作为参数传给该函数(电话里说可以来吃了)，这个函数是我写给浏览器调用的，所以是回调函数 总结：异步任务不能拿到结果，于是我们传一个回调给异步任务，异步任务完成时调用回调，调用的时候把结果作">
+    <meta name="description" content="[ES6] Iterator遍历器 概念 遍历器（Iterator）是一种接口，为各种不同的数据结构提供同一的访问机制。任何数据结构只要部署 Iterator 接口，就可以完成遍历操作（即依次处理该数据结构的所有成员）。 作用：   为各种数据结构，提供一个统一的、简便的访问接口；   使得数据结构的成员能够按某种次序排列；   ES6 创造了一种新的遍历命令for...of循环，Iterator">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Promise 与 回调 与 异步">
-<meta property="og:url" content="https://bald3r.wang/2022/06/24/16-Promise%E4%B8%8E%E5%BC%82%E6%AD%A5%E4%B8%8E%E5%9B%9E%E8%B0%83/index.html">
+<meta property="og:title" content="ES6 Iterator遍历器">
+<meta property="og:url" content="https://bald3r.wang/2023/07/26/Iterator/index.html">
 <meta property="og:site_name" content="冷面杀手的个人站">
-<meta property="og:description" content="Promise 与 回调 与 异步 异步与回调 关联 异步任务需要在得到结果时通知 JS 来拿结果 可以让 JS 留一个函数地址(电话号码)给浏览器，异步任务完成时浏览器调用该函数地址即可(拨打电话)，同时把结果作为参数传给该函数(电话里说可以来吃了)，这个函数是我写给浏览器调用的，所以是回调函数 总结：异步任务不能拿到结果，于是我们传一个回调给异步任务，异步任务完成时调用回调，调用的时候把结果作">
+<meta property="og:description" content="[ES6] Iterator遍历器 概念 遍历器（Iterator）是一种接口，为各种不同的数据结构提供同一的访问机制。任何数据结构只要部署 Iterator 接口，就可以完成遍历操作（即依次处理该数据结构的所有成员）。 作用：   为各种数据结构，提供一个统一的、简便的访问接口；   使得数据结构的成员能够按某种次序排列；   ES6 创造了一种新的遍历命令for...of循环，Iterator">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-06-24T07:29:14.000Z">
-<meta property="article:modified_time" content="2023-07-12T07:33:20.230Z">
+<meta property="og:image" content="https://img.bald3r.wang/img/20230725153956.png">
+<meta property="article:published_time" content="2023-07-26T07:55:58.000Z">
+<meta property="article:modified_time" content="2023-07-26T07:56:56.866Z">
 <meta property="article:author" content="Allen">
 <meta property="article:tag" content="JS">
+<meta property="article:tag" content="ES6">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img.bald3r.wang/img/20230725153956.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Promise 与 回调 与 异步 - 冷面杀手的个人站</title>
+  <title>ES6 Iterator遍历器 - 冷面杀手的个人站</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -243,7 +246,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Promise 与 回调 与 异步"></span>
+            <span id="subtitle" data-typed-text="ES6 Iterator遍历器"></span>
           
         </div>
 
@@ -254,8 +257,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-06-24 15:29" pubdate>
-          2022年6月24日 下午
+        <time datetime="2023-07-26 15:55" pubdate>
+          2023年7月26日 下午
         </time>
       </span>
     
@@ -266,7 +269,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          975 字
+          2.7k 字
         
       </span>
     
@@ -277,7 +280,7 @@
         
         
         
-          9 分钟
+          23 分钟
         
       </span>
     
@@ -315,75 +318,136 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Promise 与 回调 与 异步</h1>
+            <h1 style="display: none">ES6 Iterator遍历器</h1>
             
             
               <div class="markdown-body">
                 
-                <h1>Promise 与 回调 与 异步</h1>
-<h2 id="异步与回调">异步与回调</h2>
-<p><strong>关联</strong></p>
-<p>异步任务需要在得到结果时通知 JS 来拿结果</p>
-<p>可以让 JS 留一个函数地址(电话号码)给浏览器，异步任务完成时浏览器调用该函数地址即可(拨打电话)，同时把结果作为参数传给该函数(电话里说可以来吃了)，这个函数是我写给浏览器调用的，所以是回调函数</p>
-<p><strong>总结：异步任务不能拿到结果，于是我们传一个回调给异步任务，异步任务完成时调用回调，调用的时候把结果作为参数</strong></p>
-<p><strong>区别</strong></p>
-<p>异步任务需要用到回调函数来通知结果，但回调函数不一定只用在异步任务里，回调可以用到同步任务里</p>
-<p><code>array.forEach( n =&gt; console.log(n) )</code> 就是同步回调</p>
-<h3 id="异步">异步</h3>
-<p>区别同步：同步指JS一直等待某个函数的结果，拿到结果之后JS才会继续向下执行代码</p>
-<ul class="lvl-0">
-<li class="lvl-3">
-<p>如果 JS 不能直接拿到一个函数的结果，可以先去执行别的代码，等结果到了再取结果，这就是异步</p>
-</li>
-<li class="lvl-3">
-<p>异步的结果可以通过轮询获取，轮询就是定时去询问结果拿到了没有</p>
-</li>
-<li class="lvl-3">
-<p>异步的结果可以通过回调获取，一般来说结果会被作为回调的第一个参数</p>
-</li>
-<li class="lvl-3">
-<p>异步的好处是可以把用来等待的时间拿去做别的事情</p>
-</li>
-</ul>
-<p>如果一个函数的返回值处于</p>
+                <h1>[ES6] Iterator遍历器</h1>
+<h2 id="概念">概念</h2>
+<p>遍历器（Iterator）是一种接口，为各种不同的数据结构提供同一的访问机制。任何数据结构只要部署 Iterator 接口，就可以完成遍历操作（即依次处理该数据结构的所有成员）。</p>
+<p>作用：</p>
 <ul class="lvl-0">
 <li class="lvl-2">
-<p>setTimeout</p>
+<p>为各种数据结构，提供一个统一的、简便的访问接口；</p>
 </li>
 <li class="lvl-2">
-<p>AJAX（即 XMLHttpRequest）</p>
+<p>使得数据结构的成员能够按某种次序排列；</p>
 </li>
 <li class="lvl-2">
-<p>AddEventListener</p>
+<p>ES6 创造了一种新的遍历命令<code>for...of</code>循环，Iterator 接口主要供<code>for...of</code>消费。</p>
 </li>
 </ul>
-<p>这三个东西内部，那么这个函数就是异步函数</p>
-<h3 id="回调">回调</h3>
-<ul class="lvl-0">
-<li class="lvl-3">
-<p>满足某些条件的函数才被称为回调，比如我写一个函数 A，传给另一个函数 B 调用，那么函数 A 就是回调</p>
-</li>
-<li class="lvl-3">
-<p>回调可以用于同步任务，不一定非要用于异步任务</p>
-</li>
-<li class="lvl-3">
-<p>有的时候回调还可以传给一个对象，如 request.onreadystatechange，等待浏览器来调用</p>
-</li>
-</ul>
-<h2 id="Promise">Promise</h2>
-<p>优点：</p>
+<p>遍历的过程：结合 Generator 生成器理解</p>
 <ol>
 <li class="lvl-3">
-<p>规范回调的名字或顺序</p>
+<p>创建一个指针对象，指向当前数据结构的起始位置。也就是说，遍历器对象本质上，就是一个指针对象。</p>
 </li>
 <li class="lvl-3">
-<p>拒绝回调地狱，让代码可读性更强</p>
+<p>第一次调用指针对象的<code>next</code>方法，可以将指针指向数据结构的第一个成员。</p>
 </li>
 <li class="lvl-3">
-<p>很方便地捕获错误</p>
+<p>第二次调用指针对象的<code>next</code>方法，指针就指向数据结构的第二个成员。</p>
+</li>
+<li class="lvl-3">
+<p>不断调用指针对象的<code>next</code>方法，直到它指向数据结构的结束位置。</p>
 </li>
 </ol>
-<p>使用 <code>return new Promise((resolve, reject)=&gt; &#123;&#125;)</code> 就可以构造一个 Promise 对象，构造出来的 Promise 对象含有一个 <code>.then()</code> 函数属性，resolve 和 reject 可以改成任何其他名字，不影响使用，但一般就叫这两个名字，任务成功的时候调用 resolve，失败的时候调用 reject，resolve 和 reject 都只接受一个参数，resolve 和 reject 并不是 .then(success, fail) 里面的 success 和 fail，resolve 会去调用 success，reject 会去调用 fail</p>
+<p>每一次调用<code>next</code>方法，都会返回数据结构的当前成员的信息。具体来说，就是返回一个包含<code>value</code>和<code>done</code>两个属性的对象。其中，<code>value</code>属性是当前成员的值，<code>done</code>属性是一个布尔值，表示遍历是否结束。</p>
+<h2 id="与for-of的关系">与<code>for...of</code>的关系</h2>
+<p>实现 Iterator 接口的目的，就是为所有的数据结构提供一种统一的访问机制，即<code>for...of</code>循环。当使用<code>for...of</code>循环遍历某种数据结构时，该循环会自动去寻找 Iterator 接口。</p>
+<p>一种数据结构只要部署了 Iterator 接口，我们就称这种数据结构是“可遍历的”（iterable）。</p>
+<p>默认的 Iterator 接口部署在数据结构的<code>Symbol.iterator</code>属性。它就是当前数据结构默认的遍历器生成函数，执行它就会返回一个遍历器。</p>
+<p>原生具备 Iterator 接口的数据结构有：</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>Array</p>
+</li>
+<li class="lvl-2">
+<p>Map</p>
+</li>
+<li class="lvl-2">
+<p>Set</p>
+</li>
+<li class="lvl-2">
+<p>String</p>
+</li>
+<li class="lvl-2">
+<p>TypedArray</p>
+</li>
+<li class="lvl-2">
+<p>函数的 arguments 对象</p>
+</li>
+<li class="lvl-2">
+<p>NodeList 对象</p>
+</li>
+</ul>
+<h2 id="使用场景">使用场景</h2>
+<ol>
+<li class="lvl-3">
+<p><code>for...of</code></p>
+</li>
+<li class="lvl-3">
+<p>对数组和 Set 结构进行解构赋值时</p>
+</li>
+<li class="lvl-3">
+<p><code>...</code>扩展运算符（可用来将该数据结构转为数组）</p>
+</li>
+<li class="lvl-3">
+<p><code>yield*</code></p>
+</li>
+<li class="lvl-3">
+<p>其他对数组进行遍历的场景，如</p>
+<ul class="lvl-2">
+<li class="lvl-5">for…of</li>
+<li class="lvl-5">Array.from()</li>
+<li class="lvl-5">Map(), Set(), WeakMap(), WeakSet()（比如<code>new Map([['a',1],['b',2]])</code>）</li>
+<li class="lvl-5">Promise.all()</li>
+<li class="lvl-5">Promise.race()</li>
+</ul>
+</li>
+</ol>
+<h2 id="字符串的-Iterator-接口">字符串的 Iterator 接口</h2>
+<p>字符串也是可以遍历的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">var</span> someString = <span class="hljs-string">&quot;hi&quot;</span>;<br><span class="hljs-keyword">typeof</span> someString[<span class="hljs-title class_">Symbol</span>.<span class="hljs-property">iterator</span>]<br><span class="hljs-comment">// &quot;function&quot;</span><br><br><span class="hljs-keyword">var</span> iterator = someString[<span class="hljs-title class_">Symbol</span>.<span class="hljs-property">iterator</span>]();<br><br>iterator.<span class="hljs-title function_">next</span>()  <span class="hljs-comment">// &#123; value: &quot;h&quot;, done: false &#125;</span><br>iterator.<span class="hljs-title function_">next</span>()  <span class="hljs-comment">// &#123; value: &quot;i&quot;, done: false &#125;</span><br>iterator.<span class="hljs-title function_">next</span>()  <span class="hljs-comment">// &#123; value: undefined, done: true &#125;</span><br></code></pre></td></tr></table></figure>
+<h2 id="方法">方法</h2>
+<p>遍历器对象有三个方法，如果要手动实现遍历器对象生成函数，必须要实现<code>next()</code>方法，可选实现<code>return()</code>和<code>throw()</code>方法。</p>
+<h3 id="return"><code>return()</code></h3>
+<p><code>return()</code>方法的使用场合是，如果<code>for...of</code>循环提前退出（通常是因为出错，或者有<code>break</code>语句），就会调用<code>return()</code>方法。如果一个对象在完成遍历前，需要清理或释放资源，就可以部署<code>return()</code>方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-comment">// 情况一</span><br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> line <span class="hljs-keyword">of</span> <span class="hljs-title function_">readLinesSync</span>(fileName)) &#123;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(line);<br>  <span class="hljs-keyword">break</span>;<br>&#125;<br><br><span class="hljs-comment">// 情况二</span><br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> line <span class="hljs-keyword">of</span> <span class="hljs-title function_">readLinesSync</span>(fileName)) &#123;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(line);<br>  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>上面代码中，情况一输出文件的第一行以后，就会执行<code>return()</code>方法，关闭这个文件；情况二会在执行<code>return()</code>方法关闭文件之后，再抛出错误。</p>
+<p>注意，<code>return()</code>方法必须返回一个对象，这是 Generator 语法决定的。</p>
+<h3 id="throw"><code>throw()</code></h3>
+<p><code>throw()</code>方法主要是配合 Generator 函数使用，一般的遍历器对象用不到这个方法。</p>
+<h2 id="数组的遍历">数组的遍历</h2>
+<p>JavaScript 原有的<code>for...in</code>循环，只能获得对象的键名，不能直接获取键值。ES6 提供<code>for...of</code>循环，允许遍历获得键值。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">var</span> arr = [<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-string">&#x27;d&#x27;</span>];<br><br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> a <span class="hljs-keyword">in</span> arr) &#123;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(a); <span class="hljs-comment">// 0 1 2 3</span><br>&#125;<br><br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> a <span class="hljs-keyword">of</span> arr) &#123;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(a); <span class="hljs-comment">// a b c d</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>上面代码表明，<code>for...in</code>循环读取键名，<code>for...of</code>循环读取键值。如果要通过<code>for...of</code>循环，获取数组的索引，可以借助数组实例的<code>entries</code>方法和<code>keys</code>方法。</p>
+<p><code>for...of</code>循环调用遍历器接口，数组的遍历器接口只返回具有数字索引的属性。这一点跟<code>for...in</code>循环也不一样。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">let</span> arr = [<span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">7</span>];<br>arr.<span class="hljs-property">foo</span> = <span class="hljs-string">&#x27;hello&#x27;</span>;<br><br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i <span class="hljs-keyword">in</span> arr) &#123;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(i); <span class="hljs-comment">// &quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;foo&quot;</span><br>&#125;<br><br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i <span class="hljs-keyword">of</span> arr) &#123;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(i); <span class="hljs-comment">//  &quot;3&quot;, &quot;5&quot;, &quot;7&quot;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="对比其他遍历方式">对比其他遍历方式</h2>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>数组的 <code>forEach</code>循环</p>
+<p>无法中途跳出<code>forEach</code>循环，<code>break</code>命令或<code>return</code>命令都不能奏效。</p>
+</li>
+<li class="lvl-2">
+<p><code>for...in</code>循环</p>
+<ul class="lvl-2">
+<li class="lvl-4">数组的键名是数字，但是<code>for...in</code>循环是以字符串作为键名“0”、“1”、“2”等等。</li>
+<li class="lvl-4"><code>for...in</code>循环不仅遍历数字键名，还会遍历手动添加的其他键，甚至包括原型链上的键。</li>
+<li class="lvl-4">某些情况下，<code>for...in</code>循环会以任意顺序遍历键名。</li>
+</ul>
+</li>
+<li class="lvl-2">
+<p><code>for...of</code>循环</p>
+<ul class="lvl-2">
+<li class="lvl-4">有着同<code>for...in</code>一样的简洁语法，但是没有<code>for...in</code>那些缺点。</li>
+<li class="lvl-4">不同于<code>forEach</code>方法，它可以与<code>break</code>、<code>continue</code>和<code>return</code>配合使用。</li>
+<li class="lvl-4">提供了遍历所有数据结构的统一操作接口。</li>
+</ul>
+</li>
+</ul>
 
                 
               </div>
@@ -405,6 +469,13 @@
   <a href="/categories/JS/" class="category-chain-item">JS</a>
   
   
+    <span>></span>
+    
+  <a href="/categories/JS/ES6/" class="category-chain-item">ES6</a>
+  
+  
+
+  
 
       </span>
     
@@ -419,6 +490,8 @@
       
         <a href="/tags/JS/">#JS</a>
       
+        <a href="/tags/ES6/">#ES6</a>
+      
     </div>
   
 </div>
@@ -429,8 +502,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Promise 与 回调 与 异步</div>
-      <div>https://bald3r.wang/2022/06/24/16-Promise与异步与回调/</div>
+      <div>ES6 Iterator遍历器</div>
+      <div>https://bald3r.wang/2023/07/26/Iterator/</div>
     </div>
     <div class="license-meta">
       
@@ -442,7 +515,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年6月24日</div>
+          <div>2023年7月26日</div>
         </div>
       
       
@@ -474,18 +547,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/06/27/18-MVC%E3%80%81EventBus%E3%80%81%E8%A1%A8%E9%A9%B1%E5%8A%A8%E7%BC%96%E7%A8%8B%E3%80%81%E6%A8%A1%E5%9D%97%E5%8C%96/" title="MVC、EventBus、表驱动编程、模块化">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">MVC、EventBus、表驱动编程、模块化</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/06/24/17-%E8%B7%A8%E5%9F%9F/" title="跨域">
-                        <span class="hidden-mobile">跨域</span>
+                      <a href="/2023/07/26/Set-%E5%92%8C-Map/" title="ES6 Set 和 Map">
+                        <span class="hidden-mobile">ES6 Set 和 Map</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
