@@ -102,10 +102,14 @@ theme: fluid
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: git
-  repo: https://github.com/baIder/baider.github.io
-  # example, https://github.com/hexojs/hexojs.github.io
-  branch: gh-pages
+  - type: git
+    repo: https://github.com/baIder/baider.github.io
+    # example, https://github.com/hexojs/hexojs.github.io
+    branch: gh-pages
+
+  - type: git
+    repo: https://github.com/baIder/blog-deploy
+    branch: main
 
 markdown:
   preset: "default"
