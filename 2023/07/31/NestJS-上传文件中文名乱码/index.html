@@ -16,24 +16,27 @@
   <meta name="author" content="Allen">
   <meta name="keywords" content="">
   
-    <meta name="description" content="computed computed是计算属性，可以计算出一个值 1234&lt;div id&#x3D;&quot;example&quot;&gt;  &lt;p&gt;Original message: &quot;&amp;#123;&amp;#123; message &amp;#125;&amp;#125;&quot;&lt;&#x2F;p&gt;  &lt;p&gt;Computed reversed message: &quot;&amp;#">
+    <meta name="description" content="NestJS 上传文件中文名乱码 背景 在使用 NestJS 写上传接口时，发现通过multipart&#x2F;form-data上传文件的文件名是中文时，服务器读取到的是乱码，示例如下： 上传云海.jpg，服务器返回： 123456789101112131415161718&amp;#123;    &quot;code&quot;: 0,    &quot;message&quot;: &quot;请求成功&amp;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="computed 和 watch">
-<meta property="og:url" content="https://bald3r.wang/2022/07/03/22-Vue-computed-%E5%92%8C-watch/index.html">
+<meta property="og:title" content="NestJS 上传文件中文名乱码">
+<meta property="og:url" content="https://bald3r.wang/2023/07/31/NestJS-%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E4%B8%AD%E6%96%87%E5%90%8D%E4%B9%B1%E7%A0%81/index.html">
 <meta property="og:site_name" content="冷面杀手的个人站">
-<meta property="og:description" content="computed computed是计算属性，可以计算出一个值 1234&lt;div id&#x3D;&quot;example&quot;&gt;  &lt;p&gt;Original message: &quot;&amp;#123;&amp;#123; message &amp;#125;&amp;#125;&quot;&lt;&#x2F;p&gt;  &lt;p&gt;Computed reversed message: &quot;&amp;#">
+<meta property="og:description" content="NestJS 上传文件中文名乱码 背景 在使用 NestJS 写上传接口时，发现通过multipart&#x2F;form-data上传文件的文件名是中文时，服务器读取到的是乱码，示例如下： 上传云海.jpg，服务器返回： 123456789101112131415161718&amp;#123;    &quot;code&quot;: 0,    &quot;message&quot;: &quot;请求成功&amp;">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-07-03T07:29:14.000Z">
-<meta property="article:modified_time" content="2023-07-12T07:33:20.232Z">
+<meta property="og:image" content="https://img.bald3r.wang/img/20230712153658.png">
+<meta property="article:published_time" content="2023-07-31T03:56:38.000Z">
+<meta property="article:modified_time" content="2023-07-31T03:57:04.449Z">
 <meta property="article:author" content="Allen">
-<meta property="article:tag" content="Vue">
+<meta property="article:tag" content="Node.js">
+<meta property="article:tag" content="NestJS">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img.bald3r.wang/img/20230712153658.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>computed 和 watch - 冷面杀手的个人站</title>
+  <title>NestJS 上传文件中文名乱码 - 冷面杀手的个人站</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -243,7 +246,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="computed 和 watch"></span>
+            <span id="subtitle" data-typed-text="NestJS 上传文件中文名乱码"></span>
           
         </div>
 
@@ -254,8 +257,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-07-03 15:29" pubdate>
-          2022年7月3日 下午
+        <time datetime="2023-07-31 11:56" pubdate>
+          2023年7月31日 中午
         </time>
       </span>
     
@@ -266,7 +269,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.9k 字
+          2.4k 字
         
       </span>
     
@@ -277,7 +280,7 @@
         
         
         
-          16 分钟
+          20 分钟
         
       </span>
     
@@ -315,44 +318,45 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">computed 和 watch</h1>
+            <h1 style="display: none">NestJS 上传文件中文名乱码</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="computed"><a target="_blank" rel="noopener" href="https://cn.vuejs.org/v2/guide/computed.html">computed</a></h2>
-<p>computed是计算属性，可以计算出一个值</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs HTML"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;example&quot;</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Original message: &quot;&#123;&#123; message &#125;&#125;&quot;<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Computed reversed message: &quot;&#123;&#123; reversedMessage &#125;&#125;&quot;<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br></code></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">var</span> vm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Vue</span>(&#123;<br>  <span class="hljs-attr">el</span>: <span class="hljs-string">&#x27;#example&#x27;</span>,<br>  <span class="hljs-attr">data</span>: &#123;<br>    <span class="hljs-attr">message</span>: <span class="hljs-string">&#x27;Hello&#x27;</span><br>  &#125;,<br>  <span class="hljs-attr">computed</span>: &#123;<br>    <span class="hljs-comment">// 计算属性的 getter</span><br>    <span class="hljs-attr">reversedMessage</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;<br>      <span class="hljs-comment">// `this` 指向 vm 实例</span><br>      <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">message</span>.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;&#x27;</span>).<span class="hljs-title function_">reverse</span>().<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;&#x27;</span>)<br>    &#125;<br>  &#125;<br>&#125;)<br></code></pre></td></tr></table></figure>
-<p><strong>特点：</strong></p>
+                <h1>NestJS 上传文件中文名乱码</h1>
+<h2 id="背景">背景</h2>
+<p>在使用 NestJS 写上传接口时，发现通过<code>multipart/form-data</code>上传文件的文件名是中文时，服务器读取到的是乱码，示例如下：</p>
+<p>上传<code>云海.jpg</code>，服务器返回：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;code&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;message&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;请求成功&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;picture&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;extension&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;.jpg&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;äºæµ·.jpg&quot;</span><span class="hljs-punctuation">,</span>					<span class="hljs-comment">// 文件名乱码</span><br>            <span class="hljs-attr">&quot;origin&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;http://localhost:3000/static/picture/2023/07/1690774175213.jpg&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1831902</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">65</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;mid&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;link_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;0&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;status&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;created_at&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2023-07-30T19:29:35.224Z&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;updated_at&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2023-07-30T19:29:35.224Z&quot;</span><br>        <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+<p>使用英文名就是正常的，并且，使用 Apifox 测试接口，<strong>也是正常的</strong>。</p>
+<h2 id="环境">环境</h2>
 <ul class="lvl-0">
 <li class="lvl-2">
-<p>可以直接调用，不需要加括号</p>
-</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs HTML"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Reversed message: &quot;&#123;&#123; reversedMessage() &#125;&#125;&quot;<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><br></code></pre></td></tr></table></figure>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p>有缓存机制，如果依赖不变，computed的值不会再重新计算</p>
-</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-comment">// 和methods非常相似，但是区别就在于缓存机制</span><br><span class="hljs-attr">methods</span>: &#123;<br>  <span class="hljs-attr">reversedMessage</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">message</span>.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;&#x27;</span>).<span class="hljs-title function_">reverse</span>().<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;&#x27;</span>)<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<pre><code class="hljs">&gt; 我们可以将同一函数定义为一个方法而不是一个计算属性。两种方式的最终结果确实是完全相同的。然而，不同的是**计算属性是基于它们的响应式依赖进行缓存的**。只在相关响应式依赖发生改变时它们才会重新求值。这就意味着只要 `message` 还没有发生改变，多次访问 `reversedMessage` 计算属性会立即返回之前的计算结果，而不必再次执行函数。相比之下，每当触发重新渲染时，调用方法将**总会**再次执行函数。
-</code></pre>
-<h2 id="watch"><a target="_blank" rel="noopener" href="https://cn.vuejs.org/v2/api/#watch">watch</a></h2>
-<p>watch是监听</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">var</span> vm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Vue</span>(&#123;<br>  <span class="hljs-attr">data</span>: &#123;<br>    <span class="hljs-attr">a</span>: <span class="hljs-number">1</span>,<br>    <span class="hljs-attr">b</span>: <span class="hljs-number">2</span>,<br>    <span class="hljs-attr">c</span>: <span class="hljs-number">3</span>,<br>    <span class="hljs-attr">d</span>: <span class="hljs-number">4</span>,<br>    <span class="hljs-attr">e</span>: &#123;<br>      <span class="hljs-attr">f</span>: &#123;<br>        <span class="hljs-attr">g</span>: <span class="hljs-number">5</span><br>      &#125;<br>    &#125;<br>  &#125;,<br>  <span class="hljs-attr">watch</span>: &#123;<br>    <span class="hljs-attr">a</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">val, oldVal</span>) &#123;<br>      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;new: %s, old: %s&#x27;</span>, val, oldVal)<br>    &#125;,<br>    <span class="hljs-comment">// 方法名</span><br>    <span class="hljs-attr">b</span>: <span class="hljs-string">&#x27;someMethod&#x27;</span>,<br>    <span class="hljs-comment">// 该回调会在任何被侦听的对象的 property 改变时被调用，不论其被嵌套多深</span><br>    <span class="hljs-attr">c</span>: &#123;<br>      <span class="hljs-attr">handler</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">val, oldVal</span>) &#123; <span class="hljs-comment">/* ... */</span> &#125;,<br>      <span class="hljs-attr">deep</span>: <span class="hljs-literal">true</span><br>    &#125;,<br>    <span class="hljs-comment">// 该回调将会在侦听开始之后被立即调用</span><br>    <span class="hljs-attr">d</span>: &#123;<br>      <span class="hljs-attr">handler</span>: <span class="hljs-string">&#x27;someMethod&#x27;</span>,<br>      <span class="hljs-attr">immediate</span>: <span class="hljs-literal">true</span><br>    &#125;,<br>    <span class="hljs-comment">// 你可以传入回调数组，它们会被逐一调用</span><br>    <span class="hljs-attr">e</span>: [<br>      <span class="hljs-string">&#x27;handle1&#x27;</span>,<br>      <span class="hljs-keyword">function</span> <span class="hljs-title function_">handle2</span> (val, oldVal) &#123; <span class="hljs-comment">/* ... */</span> &#125;,<br>      &#123;<br>        <span class="hljs-attr">handler</span>: <span class="hljs-keyword">function</span> <span class="hljs-title function_">handle3</span> (val, oldVal) &#123; <span class="hljs-comment">/* ... */</span> &#125;,<br>        <span class="hljs-comment">/* ... */</span><br>      &#125;<br>    ],<br>    <span class="hljs-comment">// watch vm.e.f&#x27;s value: &#123;g: 5&#125;</span><br>    <span class="hljs-string">&#x27;e.f&#x27;</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">val, oldVal</span>) &#123; <span class="hljs-comment">/* ... */</span> &#125;<br>  &#125;<br>&#125;)<br>vm.<span class="hljs-property">a</span> = <span class="hljs-number">2</span> <span class="hljs-comment">// =&gt; new: 2, old: 1</span><br></code></pre></td></tr></table></figure>
-<p><strong>特点：</strong></p>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p>immediate</p>
-<p>监听开始时会立刻调用一次，类似<code>do...while...</code>会先执行一次</p>
+<p>Node：v18.16.1</p>
 </li>
 <li class="lvl-2">
-<p>deep</p>
-<p>是否监听对象内部的变化，true:监听，false:不监听</p>
+<p>NestJS：10.1.7</p>
 </li>
 </ul>
+<p>使用的 Express 的 Multer 包。</p>
+<h2 id="定位问题">定位问题</h2>
+<p>由于上传文件使用的是 Multer ，因此笔者找到了 Github 上面 Multer 的代码仓库，然后在 Issues 中搜索，发现了类似的情况：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/expressjs/multer/issues/1104">Issue with UTF-8 characters in filename · Issue #1104 · expressjs/multer (github.com)</a></p>
+<p>这个 issue 中提到了另一个包 busboy，Multer 就是通过这个包来解析 FormData 的，原来是这个 busboy 的问题，在该仓库的 Issues 中也能发现有人提了这个问题：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/mscdex/busboy/issues/20">Parsing fails if filename contains UTF-8 characters · Issue #20 · mscdex/busboy (github.com)</a></p>
+<p>busboy 将配置项<code>defParamCharset</code>的默认值从<code>utf8</code>改为了<code>latin1</code>，从而导致了这个问题（居然是一个 patch 更新导致很多人的代码出问题了然后就被指责了），需要手动设置一下。问题是这个 busboy 是由 Multer 负责创建的，同时 Multer 并没有提供<code>defParamCharset</code>这个选项，更别说在内部使用了 Multer 的 NestJS 了。</p>
+<h2 id="解决问题">解决问题</h2>
+<p>目前 issue 中提供的方法和搜索引擎中提供的方法是类似的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js">file.<span class="hljs-property">originalname</span> = <span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">from</span>(file.<span class="hljs-property">originalname</span>, <span class="hljs-string">&#x27;latin1&#x27;</span>).<span class="hljs-title function_">toString</span>(<span class="hljs-string">&#x27;utf8&#x27;</span>);<br></code></pre></td></tr></table></figure>
+<p>在 NestJS 中，我们可以自定义一个管道 Pipe 来处理这个问题。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">PipeTransform</span>, <span class="hljs-title class_">Injectable</span>, <span class="hljs-title class_">ArgumentMetadata</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/common&#x27;</span>;<br><br><span class="hljs-meta">@Injectable</span>()<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">FileNameEncodePipe</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">PipeTransform</span> &#123;<br>  <span class="hljs-title function_">transform</span>(<span class="hljs-params">value: Express.Multer.File, metadata: ArgumentMetadata</span>) &#123;<br>    value.<span class="hljs-property">originalname</span> = <span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">from</span>(value.<span class="hljs-property">originalname</span>, <span class="hljs-string">&#x27;latin1&#x27;</span>).<span class="hljs-title function_">toString</span>(<span class="hljs-string">&#x27;utf8&#x27;</span>);<br>    <span class="hljs-keyword">return</span> value;<br>  &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>回到浏览器测试，发现正常了。</p>
+<p>但是 Apifox 测试又不行了。因此需要稍加改造：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">PipeTransform</span>, <span class="hljs-title class_">Injectable</span>, <span class="hljs-title class_">ArgumentMetadata</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@nestjs/common&#x27;</span>;<br><br><span class="hljs-meta">@Injectable</span>()<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">FileNameEncodePipe</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">PipeTransform</span> &#123;<br>  <span class="hljs-title function_">transform</span>(<span class="hljs-params">value: Express.Multer.File, metadata: ArgumentMetadata</span>) &#123;<br>    <span class="hljs-keyword">if</span> (!<span class="hljs-regexp">/[^\u0000-\u00ff]/</span>.<span class="hljs-title function_">test</span>(value.<span class="hljs-property">originalname</span>)) &#123;<br>      value.<span class="hljs-property">originalname</span> = <span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">from</span>(value.<span class="hljs-property">originalname</span>, <span class="hljs-string">&#x27;latin1&#x27;</span>).<span class="hljs-title function_">toString</span>(<br>        <span class="hljs-string">&#x27;utf8&#x27;</span>,<br>      );<br>    &#125;<br>    <span class="hljs-keyword">return</span> value;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这里是对原文件名进行一个正则判断，如果原来的文件名可以通过<code>latin1</code>方式正确解码出来，就不处理。</p>
+<p>至此，浏览器和 Apifox 测试都正常了。</p>
+<h2 id="后记">后记</h2>
+<p>目前这个问题在不修改源码的情况下只能自己处理了，或者等包作者更新。如果你有更好的解决方法，欢迎交流。</p>
 
                 
               </div>
@@ -371,8 +375,15 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Vue/" class="category-chain-item">Vue</a>
+  <a href="/categories/Node-js/" class="category-chain-item">Node.js</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/Node-js/NestJS/" class="category-chain-item">NestJS</a>
+  
+  
+
   
 
       </span>
@@ -386,7 +397,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Vue/">#Vue</a>
+        <a href="/tags/Node-js/">#Node.js</a>
+      
+        <a href="/tags/NestJS/">#NestJS</a>
       
     </div>
   
@@ -398,8 +411,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>computed 和 watch</div>
-      <div>https://bald3r.wang/2022/07/03/22-Vue-computed-和-watch/</div>
+      <div>NestJS 上传文件中文名乱码</div>
+      <div>https://bald3r.wang/2023/07/31/NestJS-上传文件中文名乱码/</div>
     </div>
     <div class="license-meta">
       
@@ -411,7 +424,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年7月3日</div>
+          <div>2023年7月31日</div>
         </div>
       
       
@@ -443,18 +456,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/07/04/23-Vue-sync%E4%BF%AE%E9%A5%B0%E7%AC%A6/" title=".sync修饰符">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">.sync修饰符</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/07/03/21-Webpack-loader-plugins/" title="Webpack loader &amp; plugins">
-                        <span class="hidden-mobile">Webpack loader &amp; plugins</span>
+                      <a href="/2023/07/27/NestJS-%E5%85%A5%E9%97%A8%EF%BC%88%E5%9B%9B%EF%BC%89Redis-%E5%92%8C%E6%B3%A8%E9%94%80/" title="NestJS 入门（四）Redis 和注销">
+                        <span class="hidden-mobile">NestJS 入门（四）Redis 和注销</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
