@@ -2,10 +2,14 @@
 title: Nestjs v10 中使用 Redis 作为 CacheStore 的坑
 date: 2023-06-28 15:42:16
 index_img: https://img.bald3r.wang/img/image-20230628145215603.png
+categories:
+  - Node.js
+  - NestJS
 tags:
   - Node.js
   - NestJS
   - Redis
+  - 踩坑
 ---
 ## 开发环境
 
