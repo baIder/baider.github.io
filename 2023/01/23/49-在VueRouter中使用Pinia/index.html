@@ -16,18 +16,18 @@
   <meta name="author" content="Allen">
   <meta name="keywords" content="">
   
-    <meta name="description" content="在VueRouter中使用Pinia 前言 目前Vue3+Vite+Pinia+VueRouter的组合已经非常流行了，但是在使用过程中也发现了一个小小的问题，即在VueRouter中使用Pinia会报错，后来经过一番研(bai)究(du)找到了解决方法 报错文字：  Uncaught Error: [🍍]: getActivePinia was called with no active Pi">
+    <meta name="description" content="在VueRouter中使用Pinia 2023 年 9 月 18 日更新： 经过评论提醒，Pinia 官方文档已经提供了解决方案，具体请参考官方文档 一言以蔽之，在 Pinia 实例化之后再使用 前言 目前Vue3+Vite+Pinia+VueRouter的组合已经非常流行了，但是在使用过程中也发现了一个小小的问题，即在VueRouter中使用Pinia会报错，后来经过一番研(bai)究(du)找">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在VueRouter中使用Pinia">
 <meta property="og:url" content="https://bald3r.wang/2023/01/23/49-%E5%9C%A8VueRouter%E4%B8%AD%E4%BD%BF%E7%94%A8Pinia/index.html">
 <meta property="og:site_name" content="冷面杀手的个人站">
-<meta property="og:description" content="在VueRouter中使用Pinia 前言 目前Vue3+Vite+Pinia+VueRouter的组合已经非常流行了，但是在使用过程中也发现了一个小小的问题，即在VueRouter中使用Pinia会报错，后来经过一番研(bai)究(du)找到了解决方法 报错文字：  Uncaught Error: [🍍]: getActivePinia was called with no active Pi">
+<meta property="og:description" content="在VueRouter中使用Pinia 2023 年 9 月 18 日更新： 经过评论提醒，Pinia 官方文档已经提供了解决方案，具体请参考官方文档 一言以蔽之，在 Pinia 实例化之后再使用 前言 目前Vue3+Vite+Pinia+VueRouter的组合已经非常流行了，但是在使用过程中也发现了一个小小的问题，即在VueRouter中使用Pinia会报错，后来经过一番研(bai)究(du)找">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202301131135400.png">
 <meta property="og:image" content="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202301131137003.png">
 <meta property="og:image" content="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/202301131141331.png">
 <meta property="article:published_time" content="2023-01-23T07:29:14.000Z">
-<meta property="article:modified_time" content="2023-07-12T07:33:20.234Z">
+<meta property="article:modified_time" content="2023-09-18T01:26:13.226Z">
 <meta property="article:author" content="Allen">
 <meta property="article:tag" content="Vue">
 <meta name="twitter:card" content="summary_large_image">
@@ -270,7 +270,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2k 字
+          2.1k 字
         
       </span>
     
@@ -281,7 +281,7 @@
         
         
         
-          17 分钟
+          18 分钟
         
       </span>
     
@@ -325,6 +325,9 @@
               <div class="markdown-body">
                 
                 <h1>在VueRouter中使用Pinia</h1>
+<p>2023 年 9 月 18 日更新：</p>
+<p>经过评论提醒，Pinia 官方文档已经提供了解决方案，具体请参考<a target="_blank" rel="noopener" href="https://pinia.vuejs.org/zh/core-concepts/outside-component-usage.html">官方文档</a></p>
+<p>一言以蔽之，在 Pinia 实例化之后再使用</p>
 <h1>前言</h1>
 <p>目前Vue3+Vite+Pinia+VueRouter的组合已经非常流行了，但是在使用过程中也发现了一个小小的问题，即在VueRouter中使用Pinia会报错，后来经过一番研(bai)究(du)找到了解决方法</p>
 <p>报错文字：</p>
@@ -427,9 +430,9 @@ This will fail in production.</p>
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/02/10/Vue2-Element-UI%E4%B8%ADDialog%E7%BB%84%E4%BB%B6%E7%9A%84%E4%B8%80%E4%B8%AA%E5%B0%8F%E5%9D%91/" title="Vue2+Element UI中Dialog组件的一个小坑">
+                      <a href="/2023/01/23/50-XR-Frame-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8FXR%E7%AE%80%E5%8D%95%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" title="微信小程序XR简单踩坑记录">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Vue2+Element UI中Dialog组件的一个小坑</span>
+                        <span class="hidden-mobile">微信小程序XR简单踩坑记录</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -437,8 +440,8 @@ This will fail in production.</p>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/01/23/50-XR-Frame-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8FXR%E7%AE%80%E5%8D%95%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" title="微信小程序XR简单踩坑记录">
-                        <span class="hidden-mobile">微信小程序XR简单踩坑记录</span>
+                      <a href="/2022/08/20/46-%E5%A4%A7%E5%B1%8F%E5%8F%AF%E8%A7%86%E5%8C%96-%E7%94%A8REM%E9%80%82%E9%85%8D%E5%90%84%E5%B0%BA%E5%AF%B8%E5%B1%8F%E5%B9%95/" title="大屏可视化 用REM适配各尺寸屏幕">
+                        <span class="hidden-mobile">大屏可视化 用REM适配各尺寸屏幕</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

@@ -16,28 +16,30 @@
   <meta name="author" content="Allen">
   <meta name="keywords" content="">
   
-    <meta name="description" content="[发财UI] rollup 问题 前言 发财UI已经调试完毕准备rollup，在执行rollup -c的时候出现了一个报错：  解决方法 这是因为rollup的plugins是有顺序的，这里是esbuild没有认出vue的组件，只需要调整rollup.config.js中的plugins顺序 原来： 1234567891011plugins: [    scss(&amp;#123;include: &#x2F;\">
+    <meta name="description" content="three.js 截图是空白？看看这里！ 前言 目前公司有一个需求，在 three.js 中展示模型，并截图作为模型的预览图。由于 three.js 本身是通过 canvas 画出来的，而 canvas 标签本身就可以输出成图片，本以为是一个鸽鸽下蛋这么简单的事情，但是还是有一些细节在的，于是记录下来，和大家分享一下。 环境          node v18.16.1   Microsoft E">
 <meta property="og:type" content="article">
-<meta property="og:title" content="发财UI rollup 问题">
-<meta property="og:url" content="https://bald3r.wang/2022/08/01/34-%E5%8F%91%E8%B4%A2UI-rollup-%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:title" content="three.js 截图是空白？看看这里！">
+<meta property="og:url" content="https://bald3r.wang/2023/09/28/three-js-%E6%88%AA%E5%9B%BE%E6%98%AF%E7%A9%BA%E7%99%BD%EF%BC%9F%E7%9C%8B%E7%9C%8B%E8%BF%99%E9%87%8C%EF%BC%81/index.html">
 <meta property="og:site_name" content="冷面杀手的个人站">
-<meta property="og:description" content="[发财UI] rollup 问题 前言 发财UI已经调试完毕准备rollup，在执行rollup -c的时候出现了一个报错：  解决方法 这是因为rollup的plugins是有顺序的，这里是esbuild没有认出vue的组件，只需要调整rollup.config.js中的plugins顺序 原来： 1234567891011plugins: [    scss(&amp;#123;include: &#x2F;\">
+<meta property="og:description" content="three.js 截图是空白？看看这里！ 前言 目前公司有一个需求，在 three.js 中展示模型，并截图作为模型的预览图。由于 three.js 本身是通过 canvas 画出来的，而 canvas 标签本身就可以输出成图片，本以为是一个鸽鸽下蛋这么简单的事情，但是还是有一些细节在的，于是记录下来，和大家分享一下。 环境          node v18.16.1   Microsoft E">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://img.bald3r.wang/img/20220801132528.png">
-<meta property="og:image" content="https://img.bald3r.wang/img/20220801132855.png">
-<meta property="article:published_time" content="2022-08-01T07:29:14.000Z">
-<meta property="article:modified_time" content="2023-07-12T07:33:20.234Z">
+<meta property="og:image" content="https://img.bald3r.wang/img/2023-09-28-202309281410262.png">
+<meta property="og:image" content="https://img.bald3r.wang/img/2023-09-28-Kapture%202023-09-28%20at%2014.17.57.gif">
+<meta property="og:image" content="https://img.bald3r.wang/img/2023-09-28-Kapture%202023-09-28%20at%2014.25.23.gif">
+<meta property="og:image" content="https://img.bald3r.wang/img/2023-09-28-Kapture%202023-09-28%20at%2014.31.03.gif">
+<meta property="article:published_time" content="2023-09-28T06:35:42.000Z">
+<meta property="article:modified_time" content="2023-09-28T06:36:28.911Z">
 <meta property="article:author" content="Allen">
-<meta property="article:tag" content="Vue">
-<meta property="article:tag" content="rollup">
+<meta property="article:tag" content="WebGL">
+<meta property="article:tag" content="three.js">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://img.bald3r.wang/img/20220801132528.png">
+<meta name="twitter:image" content="https://img.bald3r.wang/img/2023-09-28-202309281410262.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>发财UI rollup 问题 - 冷面杀手的个人站</title>
+  <title>three.js 截图是空白？看看这里！ - 冷面杀手的个人站</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -247,7 +249,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="发财UI rollup 问题"></span>
+            <span id="subtitle" data-typed-text="three.js 截图是空白？看看这里！"></span>
           
         </div>
 
@@ -258,8 +260,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-08-01 15:29" pubdate>
-          2022年8月1日 下午
+        <time datetime="2023-09-28 14:35" pubdate>
+          2023年9月28日 下午
         </time>
       </span>
     
@@ -270,7 +272,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          623 字
+          2.7k 字
         
       </span>
     
@@ -281,7 +283,7 @@
         
         
         
-          6 分钟
+          23 分钟
         
       </span>
     
@@ -319,23 +321,70 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">发财UI rollup 问题</h1>
+            <h1 style="display: none">three.js 截图是空白？看看这里！</h1>
             
             
               <div class="markdown-body">
                 
-                <h1>[发财UI] rollup 问题</h1>
+                <h1>three.js 截图是空白？看看这里！</h1>
 <h2 id="前言">前言</h2>
-<p>发财UI已经调试完毕准备rollup，在执行<code>rollup -c</code>的时候出现了一个报错：</p>
-<p><img src="https://img.bald3r.wang/img/20220801132528.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<h2 id="解决方法">解决方法</h2>
-<p>这是因为rollup的plugins是有顺序的，这里是esbuild没有认出vue的组件，只需要调整rollup.config.js中的plugins顺序</p>
-<p>原来：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-attr">plugins</span>: [<br>    <span class="hljs-title function_">scss</span>(&#123;<span class="hljs-attr">include</span>: <span class="hljs-regexp">/\.scss$/</span>, <span class="hljs-attr">sass</span>: dartSass&#125;),<br>    <span class="hljs-title function_">esbuild</span>(&#123;<br>        <span class="hljs-attr">include</span>: <span class="hljs-regexp">/\.[jt]s$/</span>,<br>        <span class="hljs-attr">minify</span>: process.<span class="hljs-property">env</span>.<span class="hljs-property">NODE_ENV</span> === <span class="hljs-string">&#x27;production&#x27;</span>,<br>        <span class="hljs-attr">target</span>: <span class="hljs-string">&#x27;es2015&#x27;</span><br>    &#125;),<br>    <span class="hljs-title function_">vue</span>(&#123;<br>        <span class="hljs-attr">include</span>: <span class="hljs-regexp">/\.vue$/</span>,<br>    &#125;),<br>],<br></code></pre></td></tr></table></figure>
-<p>修改后：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-attr">plugins</span>: [<br>    <span class="hljs-title function_">scss</span>(&#123;<span class="hljs-attr">include</span>: <span class="hljs-regexp">/\.scss$/</span>, <span class="hljs-attr">sass</span>: dartSass&#125;),<br>    <span class="hljs-title function_">vue</span>(&#123;<br>        <span class="hljs-attr">include</span>: <span class="hljs-regexp">/\.vue$/</span>,<br>    &#125;),<br>    <span class="hljs-title function_">esbuild</span>(&#123;<br>        <span class="hljs-attr">include</span>: <span class="hljs-regexp">/\.[jt]s$/</span>,<br>        <span class="hljs-attr">minify</span>: process.<span class="hljs-property">env</span>.<span class="hljs-property">NODE_ENV</span> === <span class="hljs-string">&#x27;production&#x27;</span>,<br>        <span class="hljs-attr">target</span>: <span class="hljs-string">&#x27;es2015&#x27;</span><br>    &#125;),<br>],<br></code></pre></td></tr></table></figure>
-<p>再次运行<code>rollup -c</code>，可以看到问题已解决</p>
-<p><img src="https://img.bald3r.wang/img/20220801132855.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>目前公司有一个需求，在 three.js 中展示模型，并截图作为模型的预览图。由于 three.js 本身是通过 canvas 画出来的，而 canvas 标签本身就可以输出成图片，本以为是一个鸽鸽下蛋这么简单的事情，但是还是有一些细节在的，于是记录下来，和大家分享一下。</p>
+<h3 id="环境">环境</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>node</td>
+<td>v18.16.1</td>
+</tr>
+<tr>
+<td>Microsoft Edge</td>
+<td>116.0.1938.62</td>
+</tr>
+<tr>
+<td>three.js</td>
+<td>0.156.1</td>
+</tr>
+</tbody>
+</table>
+<h2 id="需要实现的效果">需要实现的效果</h2>
+<p>点击页面上的按钮，将three.js当前的画面截取下来，显示在img标签中。</p>
+<h2 id="搭建基础框架">搭建基础框架</h2>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> <span class="hljs-variable constant_">THREE</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;three&quot;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">GLTFLoader</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;three/examples/jsm/loaders/GLTFLoader.js&quot;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">OrbitControls</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;three/examples/jsm/controls/OrbitControls.js&quot;</span>;<br><br><span class="hljs-keyword">const</span> canvas = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&quot;canvas.webgl&quot;</span>) <span class="hljs-keyword">as</span> <span class="hljs-title class_">HTMLCanvasElement</span>;<br><br><span class="hljs-keyword">const</span> scene = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Scene</span>();<br><br><span class="hljs-keyword">const</span> renderer = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">WebGLRenderer</span>(&#123;<br>  <span class="hljs-attr">canvas</span>: canvas,<br>&#125;);<br>renderer.<span class="hljs-title function_">setSize</span>(<span class="hljs-number">300</span>, <span class="hljs-number">300</span>, <span class="hljs-literal">false</span>);<br><br><span class="hljs-keyword">const</span> camera = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">PerspectiveCamera</span>(<span class="hljs-number">75</span>, <span class="hljs-number">300</span> / <span class="hljs-number">300</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">1000</span>);<br>camera.<span class="hljs-property">position</span>.<span class="hljs-property">z</span> = <span class="hljs-number">3</span>;<br>scene.<span class="hljs-title function_">add</span>(camera);<br><br><span class="hljs-keyword">const</span> light = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">AmbientLight</span>(<span class="hljs-number">0xffffff</span>, <span class="hljs-number">2</span>);<br>scene.<span class="hljs-title function_">add</span>(light);<br><br><span class="hljs-keyword">const</span> directionLight = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">DirectionalLight</span>(<span class="hljs-number">0xffffff</span>, <span class="hljs-number">2</span>);<br>directionLight.<span class="hljs-property">position</span>.<span class="hljs-title function_">set</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>);<br>scene.<span class="hljs-title function_">add</span>(directionLight);<br><br><span class="hljs-keyword">const</span> controls = <span class="hljs-keyword">new</span> <span class="hljs-title class_">OrbitControls</span>(camera, canvas);<br>controls.<span class="hljs-property">enableDamping</span> = <span class="hljs-literal">true</span>;<br><br><span class="hljs-keyword">const</span> gltfLoader = <span class="hljs-keyword">new</span> <span class="hljs-title class_">GLTFLoader</span>();<br>gltfLoader.<span class="hljs-title function_">load</span>(<span class="hljs-string">&quot;/DamagedHelmet.glb&quot;</span>, <span class="hljs-function">(<span class="hljs-params">gltf</span>) =&gt;</span> &#123;<br>  scene.<span class="hljs-title function_">add</span>(gltf.<span class="hljs-property">scene</span>);<br>&#125;);<br><br><span class="hljs-keyword">const</span> <span class="hljs-title function_">tick</span> = (<span class="hljs-params"></span>) =&gt; &#123;<br>  <span class="hljs-title function_">requestAnimationFrame</span>(tick);<br>  controls.<span class="hljs-title function_">update</span>();<br>  renderer.<span class="hljs-title function_">render</span>(scene, camera);<br>&#125;;<br><br><span class="hljs-title function_">tick</span>();<br><br></code></pre></td></tr></table></figure>
+<p>css代码不做展示，最终实现了以下效果：</p>
+<p><img src="https://img.bald3r.wang/img/2023-09-28-202309281410262.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="实现截图功能">实现截图功能</h2>
+<p>这里所说的截图功能，实际是将canvas画布上的内容保存下来，可以通过官方的API获得一个包含图片展示的data URI：<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLCanvasElement/toDataURL">HTMLCanvasElement.toDataURL() - Web API 接口参考 | MDN (mozilla.org)</a>，然后将<code>img</code>标签的<code>src</code>指向它就可以了。</p>
+<p>实现：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">const</span> elButton = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&quot;button&quot;</span>) <span class="hljs-keyword">as</span> <span class="hljs-title class_">HTMLButtonElement</span>;<br><span class="hljs-keyword">const</span> elImg = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&quot;img&quot;</span>) <span class="hljs-keyword">as</span> <span class="hljs-title class_">HTMLImageElement</span>;<br>elButton.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&quot;click&quot;</span>, <span class="hljs-function">() =&gt;</span> &#123;<br>  <span class="hljs-keyword">const</span> url = canvas.<span class="hljs-title function_">toDataURL</span>();<br>  elImg.<span class="hljs-property">src</span> = url;<br>&#125;);<br><br></code></pre></td></tr></table></figure>
+<p>效果：</p>
+<p><img src="https://img.bald3r.wang/img/2023-09-28-Kapture%202023-09-28%20at%2014.17.57.gif" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>可以看到，<code>img</code>标签的内容发生了变化，但是图片并没有正常显示。</p>
+<h2 id="preserveDrawingBuffer属性"><code>preserveDrawingBuffer</code>属性</h2>
+<p>通过three.js的文档<a target="_blank" rel="noopener" href="https://threejs.org/docs/index.html?q=renderer#api/zh/renderers/WebGLRenderer">WebGLRenderer – three.js docs (threejs.org)</a>可知，在构造<code>WebGLRenderer</code>时，可传入的参数中又一个<code>preserveDrawingBuffer</code>的属性，three.js对其的解释为：</p>
+<blockquote>
+<p>preserveDrawingBuffer -是否保留缓（存）直到手动清除或被覆盖。 默认<strong>false</strong>.</p>
+</blockquote>
+<p>也就是说，出于性能考虑，three.js默认是会清除canvas画布上的缓存内容的，那么我们截取的图像自然就是空白的，那我们开启这个选项：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs ts">...<br><br><span class="hljs-keyword">const</span> renderer = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">WebGLRenderer</span>(&#123;<br>  <span class="hljs-attr">canvas</span>: canvas,<br>  <span class="hljs-attr">preserveDrawingBuffer</span>: <span class="hljs-literal">true</span>,<br>&#125;);<br><br>...<br></code></pre></td></tr></table></figure>
+<p>效果：</p>
+<p><img src="https://img.bald3r.wang/img/2023-09-28-Kapture%202023-09-28%20at%2014.25.23.gif" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>可以看到，已经能正常的截取画面了。</p>
+<h2 id="优化">优化</h2>
+<p>three.js 出于性能方面的考虑，默认将<code>preserveDrawingBuffer</code>选项设置为<code>false</code>，说明打开这个选项会造成较大的性能开销。有代码洁癖的诸位看官肯定会忍不住说，不利于性能的代码我们不写！因此，有什么好办法能在关闭这个选项的前提下，也能截取画面呢？</p>
+<p>既然three.js会一直清除缓存，那我在截图前，让它重新画一次不就行了？</p>
+<p>代码如下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs ts">...<br><br><span class="hljs-keyword">const</span> renderer = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">WebGLRenderer</span>(&#123;<br>  <span class="hljs-attr">canvas</span>: canvas,<br>&#125;);<br>renderer.<span class="hljs-title function_">setSize</span>(<span class="hljs-number">300</span>, <span class="hljs-number">300</span>, <span class="hljs-literal">false</span>);<br><br>...<br><br>elButton.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&quot;click&quot;</span>, <span class="hljs-function">() =&gt;</span> &#123;<br><br>  renderer.<span class="hljs-title function_">render</span>(scene, camera);     <span class="hljs-comment">//关键代码</span><br>  <br>  <span class="hljs-keyword">const</span> url = canvas.<span class="hljs-title function_">toDataURL</span>();<br>  elImg.<span class="hljs-property">src</span> = url;<br>&#125;);<br></code></pre></td></tr></table></figure>
+<p>效果：</p>
+<p><img src="https://img.bald3r.wang/img/2023-09-28-Kapture%202023-09-28%20at%2014.31.03.gif" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>可以看到，同样实现了截图的功能。</p>
+<h2 id="后记">后记</h2>
+<p>没想到three.js截图还有这么些细节在里面，笔者也只是抛砖引玉，如果各位看官有更好的解决方式，欢迎交流。</p>
 
                 
               </div>
@@ -354,8 +403,15 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E5%8F%91%E8%B4%A2UI/" class="category-chain-item">发财UI</a>
+  <a href="/categories/WebGL/" class="category-chain-item">WebGL</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/WebGL/three-js/" class="category-chain-item">three.js</a>
+  
+  
+
   
 
       </span>
@@ -369,9 +425,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Vue/">#Vue</a>
+        <a href="/tags/WebGL/">#WebGL</a>
       
-        <a href="/tags/rollup/">#rollup</a>
+        <a href="/tags/three-js/">#three.js</a>
       
     </div>
   
@@ -383,8 +439,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>发财UI rollup 问题</div>
-      <div>https://bald3r.wang/2022/08/01/34-发财UI-rollup-问题/</div>
+      <div>three.js 截图是空白？看看这里！</div>
+      <div>https://bald3r.wang/2023/09/28/three-js-截图是空白？看看这里！/</div>
     </div>
     <div class="license-meta">
       
@@ -396,7 +452,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年8月1日</div>
+          <div>2023年9月28日</div>
         </div>
       
       
@@ -428,18 +484,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/08/02/35-%E5%8F%91%E8%B4%A2UI-%E5%AE%98%E7%BD%91%E8%A3%85%E4%BF%AE-Flash-Of-Unstyled-Content/" title="发财UI 官网装修 Flash Of Unstyled Content">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">发财UI 官网装修 Flash Of Unstyled Content</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/07/30/31-%E5%8F%91%E8%B4%A2UI-%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%971/" title="发财UI 开发日志">
-                        <span class="hidden-mobile">发财UI 开发日志</span>
+                      <a href="/2023/08/01/NestJS-%E5%85%A5%E9%97%A8%EF%BC%88%E4%BA%94%EF%BC%89%E4%BF%9D%E5%AD%98-Log-%E4%B8%BA%E6%96%87%E4%BB%B6/" title="NestJS 入门（五）保存 Log 为文件">
+                        <span class="hidden-mobile">NestJS 入门（五）保存 Log 为文件</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

@@ -270,15 +270,78 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/07/30/33-%E5%8F%91%E8%B4%A2UI-Message%E7%BB%84%E4%BB%B6%E7%9A%84%E5%AE%9E%E7%8E%B0/" target="_self">
-          发财UI Message组件的实现
+        <a href="/2022/08/01/34-%E5%8F%91%E8%B4%A2UI-rollup-%E9%97%AE%E9%A2%98/" target="_self">
+          发财UI rollup 问题
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/07/30/33-%E5%8F%91%E8%B4%A2UI-Message%E7%BB%84%E4%BB%B6%E7%9A%84%E5%AE%9E%E7%8E%B0/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/08/01/34-%E5%8F%91%E8%B4%A2UI-rollup-%E9%97%AE%E9%A2%98/" target="_self">
         <div>
-          [发财UI] Message组件的实现 前言 最近在实现Message组件，就是会从屏幕顶端弹出的一个小提醒，过一会儿就消失了。我个人非常喜欢这个设计，感觉在后续的复用性也很高，于是就打算自己手写一个作为发财UI的组件 支持的功能 目前的Message有四种类型：   普通提醒normal    成功提醒success    警告提醒warning    错误提醒error    同时还支持设置持
+          [发财UI] rollup 问题 前言 发财UI已经调试完毕准备rollup，在执行rollup -c的时候出现了一个报错：  解决方法 这是因为rollup的plugins是有顺序的，这里是esbuild没有认出vue的组件，只需要调整rollup.config.js中的plugins顺序 原来： 1234567891011plugins: [    scss(&#123;include: /\
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-08-01 15:29" pubdate>
+              2022-08-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%8F%91%E8%B4%A2UI/" class="category-chain-item">发财UI</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Vue/">#Vue</a>
+            
+              <a href="/tags/rollup/">#rollup</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2022/07/30/31-%E5%8F%91%E8%B4%A2UI-%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%971/" target="_self">
+          发财UI 开发日志
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/07/30/31-%E5%8F%91%E8%B4%A2UI-%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%971/" target="_self">
+        <div>
+          [发财UI] 开发日志 Vue3中的props和attributes 1&lt;Button @click=&quot;click&quot;&gt;按钮&lt;/Button&gt; Vue3中默认会将外部的@click=&quot;click&quot;传给组件的最外层元素，也就是&lt;button&gt;&lt;/button&gt;上 123456&lt;template&gt;  &l
         </div>
       </a>
 
@@ -331,15 +394,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/07/30/31-%E5%8F%91%E8%B4%A2UI-%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%971/" target="_self">
-          发财UI 开发日志
+        <a href="/2022/07/30/33-%E5%8F%91%E8%B4%A2UI-Message%E7%BB%84%E4%BB%B6%E7%9A%84%E5%AE%9E%E7%8E%B0/" target="_self">
+          发财UI Message组件的实现
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/07/30/31-%E5%8F%91%E8%B4%A2UI-%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%971/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/07/30/33-%E5%8F%91%E8%B4%A2UI-Message%E7%BB%84%E4%BB%B6%E7%9A%84%E5%AE%9E%E7%8E%B0/" target="_self">
         <div>
-          [发财UI] 开发日志 Vue3中的props和attributes 1&lt;Button @click=&quot;click&quot;&gt;按钮&lt;/Button&gt; Vue3中默认会将外部的@click=&quot;click&quot;传给组件的最外层元素，也就是&lt;button&gt;&lt;/button&gt;上 123456&lt;template&gt;  &l
+          [发财UI] Message组件的实现 前言 最近在实现Message组件，就是会从屏幕顶端弹出的一个小提醒，过一会儿就消失了。我个人非常喜欢这个设计，感觉在后续的复用性也很高，于是就打算自己手写一个作为发财UI的组件 支持的功能 目前的Message有四种类型：   普通提醒normal    成功提醒success    警告提醒warning    错误提醒error    同时还支持设置持
         </div>
       </a>
 
@@ -780,39 +843,6 @@
               <a href="/tags/Vue/">#Vue</a>
             
           </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2022/07/08/25-router-%E8%B7%AF%E7%94%B1/" target="_self">
-          router 路由
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/07/08/25-router-%E8%B7%AF%E7%94%B1/" target="_self">
-        <div>
-          router 路由 什么是路由  路由（routing）就是通过互联的网络把信息从源地址传输到目的地址的活动。路由发生在OSI网络参考模型中的第三层即网络层。路由引导分组转送，经过一些中间的节点后，到它们最后的目的地。  简单来说，路由就是根据需求将用户请求分发某个或某些个地点（keywords: 分发、请求） 前端路由 根据用户的请求，展示不同的内容 路由表  在电脑网络中，路由表（routin
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-07-08 15:29" pubdate>
-              2022-07-08
-            </time>
-          </div>
-        
-        
         
       </div>
     </article>
