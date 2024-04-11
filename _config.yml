@@ -5,11 +5,11 @@
 # Site
 title: "冷面杀手的个人站"
 subtitle: "无聊的博客"
-description: ""
-keywords:
+description: "前端技术博客"
+keywords: 前端, 技术博客
 author: Allen
 language: zh-CN
-timezone: ""
+timezone: Asia/Shanghai
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
@@ -17,8 +17,8 @@ url: https://bald3r.wang
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
-  trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
-  trailing_html: true # Set to false to remove trailing '.html' from permalinks
+    trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
+    trailing_html: true # Set to false to remove trailing '.html' from permalinks
 
 # Directory
 source_dir: source
@@ -35,35 +35,35 @@ new_post_name: :year-:month-:day-:title.md # File name of new posts
 default_layout: post
 titlecase: false # Transform title into titlecase
 external_link:
-  enable: true # Open external links in new tab
-  field: site # Apply to the whole site
-  exclude: ""
+    enable: true # Open external links in new tab
+    field: site # Apply to the whole site
+    exclude: ""
 filename_case: 0
 render_drafts: false
 post_asset_folder: false
 relative_link: false
 future: true
 highlight:
-  enable: true
-  line_number: true
-  auto_detect: false
-  tab_replace: ""
-  wrap: true
-  hljs: false
+    enable: true
+    line_number: true
+    auto_detect: false
+    tab_replace: ""
+    wrap: true
+    hljs: false
 prismjs:
-  enable: false
-  preprocess: true
-  line_number: true
-  tab_replace: ""
+    enable: false
+    preprocess: true
+    line_number: true
+    tab_replace: ""
 
 # Home page setting
 # path: Root path for your blogs index page. (default = '')
 # per_page: Posts displayed per page. (0 = disable pagination)
 # order_by: Posts order. (Order by date descending by default)
 index_generator:
-  path: ""
-  per_page: 10
-  order_by: -date
+    path: ""
+    per_page: 10
+    order_by: -date
 
 # Category & Tag
 default_category: uncategorized
@@ -101,52 +101,52 @@ theme: fluid
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
-deploy:
-  - type: git
-    repo: https://github.com/baIder/baider.github.io
-    # example, https://github.com/hexojs/hexojs.github.io
-    branch: gh-pages
+# deploy:
+#   - type: git
+#     repo: https://github.com/baIder/baider.github.io
+#     # example, https://github.com/hexojs/hexojs.github.io
+#     branch: gh-pages
 
-  - deploy:
-    type: rsync
-    host: ${env.HOST}
-    user: ${env.USER}
-    root: ${env.ROOT}
+#   - deploy:
+#     type: rsync
+#     host: ${env.HOST}
+#     user: ${env.USER}
+#     root: ${env.ROOT}
 
 markdown:
-  preset: "default"
-  render:
-    html: true
-    xhtmlOut: false
-    langPrefix: "language-"
-    breaks: true
-    linkify: true
-    typographer: true
-    quotes: "“”‘’"
-  enable_rules:
-  disable_rules:
-  plugins:
-    - markdown-it-abbr
-    - markdown-it-cjk-breaks
-    - markdown-it-deflist
-    - markdown-it-emoji
-    - markdown-it-footnote
-    - markdown-it-ins
-    - markdown-it-mark
-    - markdown-it-sub
-    - markdown-it-sup
-    - markdown-it-checkbox
-    - markdown-it-expandable
-  anchors:
-    level: 2
-    collisionSuffix: ""
-    permalink: false
-    permalinkClass: "header-anchor"
-    permalinkSide: "left"
-    permalinkSymbol: "¶"
-    case: 0
-    separator: "-"
-  images:
-    lazyload: false
-    prepend_root: false
-    post_asset: false
+    preset: "default"
+    render:
+        html: true
+        xhtmlOut: false
+        langPrefix: "language-"
+        breaks: true
+        linkify: true
+        typographer: true
+        quotes: "“”‘’"
+    enable_rules:
+    disable_rules:
+    plugins:
+        - markdown-it-abbr
+        - markdown-it-cjk-breaks
+        - markdown-it-deflist
+        - markdown-it-emoji
+        - markdown-it-footnote
+        - markdown-it-ins
+        - markdown-it-mark
+        - markdown-it-sub
+        - markdown-it-sup
+        - markdown-it-checkbox
+        - markdown-it-expandable
+    anchors:
+        level: 2
+        collisionSuffix: ""
+        permalink: false
+        permalinkClass: "header-anchor"
+        permalinkSide: "left"
+        permalinkSymbol: "¶"
+        case: 0
+        separator: "-"
+    images:
+        lazyload: false
+        prepend_root: false
+        post_asset: false
