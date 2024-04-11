@@ -1,0 +1,853 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Allen">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="想学前端自动化？比 Jenkins 更好上手的阿里云效 前言 前段时间写如何用 Jenkins 实现前端项目自动化打包部署，评论区有很多小伙伴分享了自己使用的 CI&#x2F;CD 工具，笔者也是刚刚接触自动化，因此每个都了解了一下，于是就发现了这个 —— 阿里云效，而对于笔者的项目，Jenkins 就有一种杀鸡用牛刀的感觉，因此本文就用阿里云效重建流水线！（绝非广告哈） 特点 询问了一下Kimi：点击链接">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阿里云效自动部署前端项目">
+<meta property="og:url" content="https://bald3r.wang/2024/04/11/%E9%98%BF%E9%87%8C%E4%BA%91%E6%95%88%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E5%89%8D%E7%AB%AF%E9%A1%B9%E7%9B%AE/index.html">
+<meta property="og:site_name" content="冷面杀手的个人站">
+<meta property="og:description" content="想学前端自动化？比 Jenkins 更好上手的阿里云效 前言 前段时间写如何用 Jenkins 实现前端项目自动化打包部署，评论区有很多小伙伴分享了自己使用的 CI&#x2F;CD 工具，笔者也是刚刚接触自动化，因此每个都了解了一下，于是就发现了这个 —— 阿里云效，而对于笔者的项目，Jenkins 就有一种杀鸡用牛刀的感觉，因此本文就用阿里云效重建流水线！（绝非广告哈） 特点 询问了一下Kimi：点击链接">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img.bald3r.wang/img/2024-04-11-202404111114631.png">
+<meta property="article:published_time" content="2024-04-11T03:18:48.000Z">
+<meta property="article:modified_time" content="2024-04-11T03:20:09.917Z">
+<meta property="article:author" content="Allen">
+<meta property="article:tag" content="阿里云效">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img.bald3r.wang/img/2024-04-11-202404111114631.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>阿里云效自动部署前端项目 - 冷面杀手的个人站</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/container.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"bald3r.wang","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"52c1d1fe05a91aa7d0310b884bf35aee","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+    <!-- Baidu Analytics -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?52c1d1fe05a91aa7d0310b884bf35aee";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Hi there!</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/JS-CSS-demos/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>demos</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="阿里云效自动部署前端项目"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-04-11 11:18" pubdate>
+          2024年4月11日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          27 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">阿里云效自动部署前端项目</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1>想学前端自动化？比 Jenkins 更好上手的阿里云效</h1>
+<h2 id="前言">前言</h2>
+<p>前段时间写<a target="_blank" rel="noopener" href="https://juejin.cn/post/7354406980784504870">如何用 Jenkins 实现前端项目自动化打包部署</a>，评论区有很多小伙伴分享了自己使用的 CI/CD 工具，笔者也是刚刚接触自动化，因此每个都了解了一下，于是就发现了这个 —— 阿里云效，而对于笔者的项目，Jenkins 就有一种杀鸡用牛刀的感觉，因此本文就用阿里云效重建流水线！（绝非广告哈）</p>
+<h2 id="特点">特点</h2>
+<p>询问了一下Kimi：<a target="_blank" rel="noopener" href="https://kimi.moonshot.cn/share/cob2l0j3vdds9ie125qg">点击链接查看和 Kimi 智能助手的对话</a></p>
+<blockquote>
+<p>总结来说，Jenkins 以其强大的插件生态和灵活性在前端自动化方面表现出色，适合对自动化流程有特殊要求或者希望在本地环境中进行 CI/CD 的场景。而阿里云效 Flow 则以其简单易用和与阿里云服务的紧密集成，在云环境中进行 CI/CD 的场景下提供了便捷的解决方案。用户可以根据自己的具体需求和使用场景来选择最合适的工具。</p>
+</blockquote>
+<p>站在一个前端角度，针对笔者的需求，我会更推荐前端新手选择阿里云效，原因是成本低。这里的成本即是心智成本，也是经济成本。Jenkins 需要熟悉 Linux 操作，并有能力排查及解决安装及配置过程产生的问题，还需要一台服务器安装，而阿里云效开箱即用，不需要安装，简单配置即可，个人使用免费版就绰绰有余（<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/173288.html?spm=a2c4g.472261.0.0.be0a1ff77pBGvz">免费版限制了流水线数量</a>）。</p>
+<p>当然了，阿里云效应该是不能连接内网的，如果你需要部署的服务区在内网中，可能阿里云效就不适合你了。</p>
+<h2 id="配置-Flow">配置 Flow</h2>
+<h3 id="创建流水线">创建流水线</h3>
+<p>打开<a target="_blank" rel="noopener" href="https://flow.aliyun.com/">云效 Flow 网站</a>，登录账号（没有阿里云账号的话需要注册），废话少说，直接新建流水线！（小小吐槽一下，一个页面两个按钮是同样的功能，一个叫“新建流水线”，一个叫“创建流水线”，强迫症看着难受）</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101414759.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="选择模板">选择模板</h3>
+<p>这里还是以笔者上一篇文章中的 Node 项目为例（Vue3+Vite），由于给出的模板中都有测试阶段，因此笔者这里选择<code>空模板</code>：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101444643.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>点击创建后，进入流水线的编辑页面：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101446004.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="添加流水线源">添加流水线源</h3>
+<p>点击<code>添加流水线源</code>：</p>
+<p>以 Github 为例，选择<code>添加服务连接</code>，</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101450136.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>第一次进入的话需要点击新建，会自动跳转到 Github 认证页面，点击绿色的授权按钮，然后输入 Github 密码确认就可以了。</p>
+<p>如果认证完成了之后，返回 云效 页面还是没有显示，就关闭这个对话框，重新打开，就能选取了：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101452363.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>点击<code>创建</code>：</p>
+<p>记得要选择刚刚创建的服务连接，笔者在尝试的时候并没有自动选中。</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101453441.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>选择对应的仓库及分支，其余选项按需选择，这里笔者都保持默认：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101455426.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>点击<code>添加</code>：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101456191.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="打包阶段配置">打包阶段配置</h3>
+<p>点击<code>空任务</code>：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101457567.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>这里<code>构建集群</code>有北京和香港两个，由于众所周知的原因，Github 项目最好选择香港集群，但是笔者实测北京集群也可以，偶尔会失败，因此笔者这里和其他选项一起保持默认。</p>
+<p>点击<code>添加步骤</code>：</p>
+<p>构建 -&gt; Node.js 构建</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101500620.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101502566.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>这里的<code>版本选择方式</code>笔者选择了输入指定版本，因为预置版本最高只有 Node 18，而笔者项目使用的是 Node 20，因此手动填写。这里云效使用的是<code>nvm</code>来安装 Node，所以要确保你输入的版本号是可以被<code>nvm install</code>识别的。</p>
+<blockquote>
+<p>笔者通过流水线构建日志发现云效会自动设置 npm 镜像源，因此不需要手动设置。</p>
+</blockquote>
+<p>到这里可以理解为已经将仓库拉取到了本地，并安装好了 Node 环境，接下来就是安装依赖和执行打包命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">cnpm install<br><br>npm run build<br></code></pre></td></tr></table></figure>
+<p>注意这里的<code>cnpm</code>是云效打包环境中自带的，同时也会有缓存。</p>
+<p>如果说，要用<code>pnpm</code>怎么办呢？只需要添加下面的命令即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">cnpm install pnpm -g<br></code></pre></td></tr></table></figure>
+<p>通过<code>变量与缓存</code>可以看到，云效会保存<code>npm</code>和<code>yarn</code>的缓存，因此如果使用<code>pnpm</code>的话，也可以将<code>pnpm</code>的<code>store</code>地址添加进去，来加快构建的速度：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101514857.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><code>pnpm</code>默认的存储地址是<code>/root/workspace/.pnpm-store/v3</code>，<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/202423.html?spm=a2cl9.flow_devops2020_goldlog_detail.0.0.202d46f6EDaP27">但是缓存是不允许添加<code>/root/workspace</code>这样的目录的</a>，因此需要通过命令更改一下，并将目录添加到云效缓存中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">pnpm config <span class="hljs-built_in">set</span> store-dir /root/pnpm-store<br></code></pre></td></tr></table></figure>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101540429.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>所以完整的命令是：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">cnpm install pnpm -g<br><br>pnpm config <span class="hljs-built_in">set</span> store-dir /root/pnpm-store<br><br>pnpm install<br><br>pnpm build<br></code></pre></td></tr></table></figure>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101540873.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<blockquote>
+<p>⚠️ 注意，这里打包好之后，还需要添加构建物上传步骤，因为流水线中的下一个流程是无法获取之前的流程中的任何文件的！构建物上传相当于将文件存到了一个共享空间中，下一个流程就能获取到了。</p>
+<p>这里也可以发散思维，也可以上传打包产物之外的文件，比如配置文件等等，供下面的流程使用。</p>
+</blockquote>
+<p>选择<code>添加步骤</code> -&gt; 上传 -&gt; 构建物上传</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101547855.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101548426.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>这里的打包路径是相当于项目路径，<code>./</code>就是项目根目录。这里是将这个文件夹打包成一个压缩文件，如果勾选了<code>制品中包含打包路径的目录</code>，那压缩包中就会有一个<code>dist</code>文件夹，这里不需要勾选。</p>
+<h3 id="部署阶段配置">部署阶段配置</h3>
+<p>点击<code>新的任务</code>：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101556238.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>选择 部署 -&gt; 主机部署：</p>
+<blockquote>
+<p>这里如果读者服务器是阿里云ECS服务器，可以直接选择 <code>ECS应用部署</code></p>
+</blockquote>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101619942.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><code>制品</code>选择上一步的制品：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101621829.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>如果之前没有配置过主机组，这里点击<code>新建主机组</code>：</p>
+<p>跳转到<code>主机组管理</code>，选择<code>新建主机组</code>，新建完成后进入这个主机组，选择<code>添加新主机</code>：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101611104.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>如果需要部署的服务器不是阿里云ECS云服务器，需要手动复制下面的代码，到目标服务器上执行，这里笔者使用的是阿里云ECS云服务器，因此<code>添加方式</code>直接选择第二项<code>阿里云ECS</code>；</p>
+<p>如果之前没有授权过，那么这里点击<code>添加服务连接</code>，然后在新的对话框中选择<code>新建</code>：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101606743.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>然后会跳转阿里云 RAM 控制访问中心授权，同意授权即可。</p>
+<p>选择刚刚添加的服务连接，选择服务区所在地域，就能找到自己的服务器了。</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101607741.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>点击保存就能将服务器添加到主机组中。</p>
+<h4 id="非阿里云ECS">非阿里云ECS</h4>
+<p>将红框代码复制到服务区终端中执行：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101612015.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101613963.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>出现上图中的<code>status running</code>就说明安装成功了，点击页面的刷新按钮，就可以看到服务器成功添加了：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101614920.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<blockquote>
+<p>笔者这里使用的是阿里云轻量服务器，其他服务商的服务器需要读者自行尝试了。</p>
+</blockquote>
+<hr>
+<p>主机组配置好后返回流水线配置页面，选择刚刚配置好的主机组：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101624074.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>这里的<code>下载路径</code>就是上面的<code>制品</code>下载到服务器上的保存路径。</p>
+<blockquote>
+<p>⚠️ 确保服务器上这个路径是存在的，不然可能会报错！</p>
+</blockquote>
+<p>这里笔者将制品下载到<code>/www/test</code>目录下：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101633119.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><code>部署脚本</code>则是<code>制品</code>下载后执行的操作，一般就是解压，然后复制到目标地址，然后重启nginx之类的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 删除之前的所有文件</span><br><span class="hljs-built_in">rm</span> -rf /www/test/*<br><br><span class="hljs-comment"># 解压文件，这里 -C 后面的路径一定要是已经存在的路径</span><br>tar zxvf /www/packages/package.tgz -C /www/test<br><br><span class="hljs-comment"># 删除下载下来的制品</span><br><span class="hljs-built_in">rm</span> /www/packages/package.tgz<br></code></pre></td></tr></table></figure>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101634326.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><code>部署策略</code>选择<code>不暂停</code>：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101634054.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h4 id="钉钉通知">钉钉通知</h4>
+<p>这一步可以选择开启钉钉机器人通知，配置方法和<a target="_blank" rel="noopener" href="https://juejin.cn/post/7354406980784504870#heading-12">上一篇 Jenkins</a> 类似：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101635186.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101635529.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>如何获取 <code>webhook 地址</code>和<code>加签密钥</code>可以看<a target="_blank" rel="noopener" href="https://juejin.cn/post/7354406980784504870#heading-12">笔者之前的 Jenkins 文章</a>。</p>
+<p>至此流水线配置完成了。</p>
+<h2 id="测试-Flow">测试 Flow</h2>
+<p>点击右上角<code>保存并运行</code>：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101639783.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101641792.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>显示部署成功，登录服务器查看文件：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101642894.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>打开网页试一下：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101644451.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>网页也正常显示了。</p>
+<h2 id="Git-提交触发流水线">Git 提交触发流水线</h2>
+<p>现在还没有实现 Git 提交触发流水线，编辑流水线，选择<code>流水线源</code>，<code>开启代码源触发</code>，取消勾选<code>开启分支或标签过滤</code>：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-10-202404101650161.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>复制下面的<code>Webhook</code>链接，然后在 Github 仓库设置里添加这个 Webhook ，注意这里的<code>Content--type</code>要选择<code>application/json</code>，否则接口会报错：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-11-202404111054112.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>随便改动代码并提交，可以看到已经自动触发构建了：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-11-202404111045914.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>笔者这里失败了，原因是 Github 连接失败：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-11-202404111046085.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>所以 Github 项目还是推荐香港集群，如果必须用北京集群的话，可以多试几次，一般就能成功。</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-11-202404111048319.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>刷新网页，可以看到更新内容也成功显示了：</p>
+<p><img src="https://img.bald3r.wang/img/2024-04-11-202404111055414.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="总结">总结</h2>
+<p>本文使用了阿里云效作为流水线工具，笔者认为对于个人项目使用阿里云效更为便捷，配置也更为简单。但如果你的项目部署在内网，或者有非常复杂的配置需要插件支持，那么 Jenkins 可能才是更好的选择。笔者也是刚接触自动化，文中如有错误或不足之处，欢迎批评指正。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/" class="category-chain-item">前端工程化</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91%E6%95%88/">#阿里云效</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>阿里云效自动部署前端项目</div>
+      <div>https://bald3r.wang/2024/04/11/阿里云效自动部署前端项目/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Allen</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年4月11日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/07/Jenkins%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E5%89%8D%E7%AB%AF%E9%A1%B9%E7%9B%AE/" title="Jenkins自动部署前端项目">
+                        <span class="hidden-mobile">Jenkins自动部署前端项目</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
