@@ -1,7 +1,7 @@
 ---
 title: NestJS 入门（四）Redis 和注销
 date: 2023-07-27 13:48:41
-index_img: https://img.bald3r.wang/img/20230712153658.png
+index_img: https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/20230712153658.png
 categories:
   - Node.js
   - NestJS
@@ -192,8 +192,6 @@ export class AuthService {
 
 可以看到，我们在调用`this.redisService.set()`函数时，传入的第三个参数为`this.configService.get('JWT_EXPIRES_IN')`，从`redis.service.ts`文件中我们不难发现，这里的第三个参数对应的是`ttl`，即 Redis 中这条数据的过期时间，在当前场景下，就是 JWT 的有效时间，因此直接从环境变量中读取`JWT_EXPIRES_IN`的值，由于这里的`ttl`的单位是毫秒，我们在上文的编辑`.env.local`文件时，将`JWT_EXPIRES_IN`值进行了改动，改为了`60000`毫秒，即 60 秒，设置这么短是为了测试方便看出效果，大家可以根据实际情况进行调整。
 
-
-
 测试一下是否生效：
 
 ```bash
@@ -218,15 +216,13 @@ curl --location --request POST 'http://localhost:3000/auth/login' \
 
 通过 Redis 图形化管理器看一下我们的 Redis 数据库：
 
-![image-20230727114736055](https://img.bald3r.wang/img/image-20230727114736055.png)
+![image-20230727114736055](https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/image-20230727114736055.png)
 
 可以看到，已经成功将 JWT 存入了 Redis，过期时间也与我们设置的 1 分钟一致。
 
 1 分钟之后，Redis 自动删除了这条数据：
 
-![image-20230727114812352](https://img.bald3r.wang/img/image-20230727114812352.png)
-
-
+![image-20230727114812352](https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/image-20230727114812352.png)
 
 ## 请求时进行校验
 
@@ -256,7 +252,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: configService.get('JWT_SECRET') ?? 'secret',
-      passReqToCallback: true,		// 注意点 ②
+      passReqToCallback: true,  // 注意点 ②
     } as StrategyOptions);
   }
 
@@ -307,8 +303,6 @@ curl --location --request GET 'http://localhost:3000/user' \
 
 校验成功。
 
-
-
 ## 注销接口
 
 接下来我们就通过删除 Redis 中的 key 的方式，实现注销用户登录的接口。
@@ -350,7 +344,7 @@ import ...
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   
-	...
+ ...
   
   @Delete('logout')
   logout(@Req() req: Request) {
@@ -365,11 +359,11 @@ import ...
 @Injectable()
 export class AuthService {
   constructor(
-  	...
+   ...
     private redisService: RedisService,
   ) {}
 
-	...
+ ...
 
   async logout(user: Partial<User>) {
     await this.redisService.del(`token_${user.id}`);
@@ -381,17 +375,12 @@ export class AuthService {
 
 用户在`DELETE /auth/logout`接口后，请求其他需要身份认证接口时，都会报`token已过期`错误。
 
-
-
 ## 后记
 
 本章中的例子有一些限制，比如只支持一个 JWT，也就是说，用户只能在一处进行登录，例如用户网页登录了，然后又用客户端登录，那先登录的网页就会失效，因为 Redis 中只存一条 JWT，并且已经被客户端登录时签发的 JWT 替换了。
-
-
 
 [Nest学习系列博客代码仓库 (github.com)](https://github.com/baIder/nest-demo)
 
 [冷面杀手的个人站 (bald3r.wang)](https://bald3r.wang/)
 
 [NestJS 相关文章](https://bald3r.wang/tags/NestJS/)
-

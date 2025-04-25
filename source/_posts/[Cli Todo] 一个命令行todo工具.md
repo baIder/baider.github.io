@@ -23,27 +23,29 @@ tags:
 
 ## 使用演示
 
-1.  首先使用`yarn`或`npm`安装`bald3r-node-todo`
+1. 首先使用`yarn`或`npm`安装`bald3r-node-todo`
+
     ```bash
     npm install bald3r-todo
     yarn global add bald3r-todo
 
     ```
-2.  安装完成后就可以使用全局命令`t`来使用了
+
+2. 安装完成后就可以使用全局命令`t`来使用了
 
     ![](https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/image_PFI5q2iQdM.png)
-3.  使用命令行添加一个待办`t add [taskName]`
+3. 使用命令行添加一个待办`t add [taskName]`
 
     ![](https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/image_lXiFyGko6H.png)
-4.  查看当前待办
+4. 查看当前待办
 
-    ![](https://img.bald3r.wang/img/20220806223935.png)
-5.  二级菜单
+    ![](https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/20220806223935.png)
+5. 二级菜单
 
     ![](https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/image_2le53n2lJK.png)
 
     ![](https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/image_JtaVVHAKR2.png)
-6.  清空所有待办`t clear`
+6. 清空所有待办`t clear`
 
     ![](https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/image_E1-fjw9GOi.png)
 

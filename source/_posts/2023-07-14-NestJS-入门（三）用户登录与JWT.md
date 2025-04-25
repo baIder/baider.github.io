@@ -1,7 +1,7 @@
 ---
 title: NestJS 入门（三）用户登录与JWT
 date: 2023-07-14 15:25:41
-index_img: https://img.bald3r.wang/img/20230712153658.png
+index_img: https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/20230712153658.png
 categories:
   - Node.js
   - NestJS
@@ -43,7 +43,7 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-	...
+ ...
 
   @BeforeInsert()
   async hashPassword() {
@@ -77,7 +77,7 @@ curl --location --request POST 'http://localhost:3000/user/' \
 
 查看数据库：
 
-<img src="https://img.bald3r.wang/img/image-20230713165229514.png" alt="image-20230713165229514" style="zoom:50%;" />
+<img src="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/image-20230713165229514.png" alt="image-20230713165229514" style="zoom:50%;" />
 
 可以看到数据库中的密码字段也已经更新。
 
@@ -106,7 +106,7 @@ export class User {
   @Column({ select: false })     // 增加了 select: false
   password: string;
 
-	...
+ ...
 }
 
 ```
@@ -161,17 +161,17 @@ import { compareSync } from 'bcrypt';
 import { BadRequestException } from '@nestjs/common';
 import { User } from 'src/user/entities/user.entity';
 
-export class LocalStrategy extends PassportStrategy(Strategy) {		// 此处的 Strategy 要引入 passport-local 中的 
+export class LocalStrategy extends PassportStrategy(Strategy) {  // 此处的 Strategy 要引入 passport-local 中的 
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,	// 将 user 实体注入进来
+    @InjectRepository(User) private readonly userRepository: Repository<User>, // 将 user 实体注入进来
   ) {
     super({
-      usernameField: 'username',	// 固定写法，指定用户名字段，可以为 phone 或 email 等其他字段，不影响
-      passwordField: 'password',	// 固定写法，指定密码字段
+      usernameField: 'username', // 固定写法，指定用户名字段，可以为 phone 或 email 等其他字段，不影响
+      passwordField: 'password', // 固定写法，指定密码字段
     } as IStrategyOptions);
   }
 
-  async validate(username: string, password: string): Promise<any> {		// 必须实现一个 validate 方法
+  async validate(username: string, password: string): Promise<any> {  // 必须实现一个 validate 方法
     const user = await this.userRepository
       .createQueryBuilder('user')
       .addSelect('user.password')
@@ -269,8 +269,6 @@ curl --location --request POST 'http://localhost:3000/auth/login' \
     "content": {}
 }
 ```
-
-
 
 ## 签发 JWT Token
 
@@ -382,8 +380,6 @@ curl --location --request POST 'http://localhost:3000/auth/login' \
 
 至此，实现签发 JWT token 。
 
-
-
 ## 验证 JWT Token
 
 用户在请求需要身份验证的接口时，会在请求的`headers`中增加一个字段`Authorization : Bearer {token}`，接下来我们就从请求头中取出 token 并进行验证。
@@ -411,7 +407,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {		// 这里的 Strategy 必须是 passport-jwt 包中的
+export class JwtStrategy extends PassportStrategy(Strategy) {  // 这里的 Strategy 必须是 passport-jwt 包中的
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {
@@ -433,11 +429,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {		// 这里的 Stra
 }
 ```
 
-策略的内容与`local`策略基本一致，通过包提供的`ExtractJwt.fromAuthHeaderAsBearerToken()`方法可以自动从`headers`中提取`Authorization`中的 token ，并且会自动去除开头的`Bearer `前缀。注意这里的`secretOrKey`需要和签发时的`secret`一致。
+策略的内容与`local`策略基本一致，通过包提供的`ExtractJwt.fromAuthHeaderAsBearerToken()`方法可以自动从`headers`中提取`Authorization`中的 token ，并且会自动去除开头的`Bearer`前缀。注意这里的`secretOrKey`需要和签发时的`secret`一致。
 
 策略必须实现一个方法`validate()`，其中的参数`payload`是我们签发的 JWT Token 中的`payload`部分：
 
-<img src="https://img.bald3r.wang/img/image-20230714135538574.png" alt="image-20230714135538574" style="zoom:50%;" />
+<img src="https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/image-20230714135538574.png" alt="image-20230714135538574" style="zoom:50%;" />
 
 所以`payload`这里其实是一个对象，包含了`username`和`id`字段。
 
@@ -458,7 +454,7 @@ import { JwtStrategy } from 'src/global/strategy/jwt.strategy';
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
   controllers: [UserController],
-  providers: [UserService, JwtStrategy],	// 将策略加入 providers 数组
+  providers: [UserService, JwtStrategy], // 将策略加入 providers 数组
 })
 export class UserModule {}
 
@@ -482,7 +478,7 @@ export class UserController {
     return this.userService.findOne(+id);
   }
 
-	...
+ ...
 }
 
 ```
@@ -532,7 +528,7 @@ curl --location --request GET 'http://localhost:3000/user/1' \
 首先我们需要理清思路：
 
 - 现有的`AuthGuard('jwt')`无法满足需求，我们需要定制
-- 有个别接口不需要验证，需要排除/标记 
+- 有个别接口不需要验证，需要排除/标记
 
 ### 做排除
 
@@ -595,7 +591,7 @@ export class UserController {
     return this.userService.findOne(+id);
   }
 
-	...
+ ...
 
 ```
 
@@ -663,8 +659,6 @@ export class AppModule {}
 ```
 
 这时我们重新请求`GET /user/{id}`和`GET /user`，都会提示未验证，但是我们请求`POST /auth/login`是没问题的，至此 JWT 验证部分就结束了。
-
-
 
 ## 环境变量
 
@@ -822,8 +816,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 }
 
 ```
-
-
 
 ## 后记
 

@@ -1,7 +1,7 @@
 ---
 title: NestJS 入门（五）保存 Log 为文件
 date: 2023-08-01 14:39:52
-index_img: https://img.bald3r.wang/img/20230712153658.png
+index_img: https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/20230712153658.png
 categories:
   - Node.js
   - NestJS
@@ -11,15 +11,11 @@ tags:
 ---
 # NestJS 入门（五）保存 Log 为文件
 
-
-
 ## 前言
 
 到这里，我们的后台项目的骨架就基本完成了，在最后我们需要给项目增加一点点“记忆”——将项目中的部分 log 信息保存到本地文件中。本章主要使用`winston`来将日志记录到文件中。
 
 一般来说，为了方便排查问题，log 中会记录请求的信息，报错的信息，和服务器的返回信息，分别对应了 NestJS 中的中间件、过滤器和拦截器，因此我们主要改造这三个部分。
-
-
 
 ## 安装 `winston`
 
@@ -32,8 +28,6 @@ pnpm install --save nest-winston winston winston-daily-rotate-file
 ```
 
 我们安装了三个包，一个是主角`winston`，一个是`nest-winston`，这个包将`winston`封装成了 NestJS 的 Module，就不需要我们二次封装了，还有一个是`winston-daily-rotate-file`，这个包主要是用来做日志文件的归档的，可以自动将日志按时间或日期等规则进行分割，避免日志都记录在一个巨大的文件中。
-
-
 
 ## 在项目中引入 `winston`
 
@@ -82,7 +76,7 @@ export class AppModule {}
 ├── README.md
 ├── config
 ├── dist
-├── logs							//	在这里
+├── logs       // 在这里
 ├── nest-cli.json
 ├── node_modules
 ├── package.json
@@ -94,8 +88,6 @@ export class AppModule {}
 
 7 directories, 6 files
 ```
-
-
 
 ## 添加中间件
 
@@ -172,8 +164,6 @@ export class AppModule implements NestModule {
 ```
 
 没有问题。
-
-
 
 ## 改造错误过滤器
 
@@ -300,7 +290,7 @@ export class LoggerMiddleware implements NestMiddleware {
 
 这时发现`main.ts`中引用`HttpExceptionFilter`的地方报错了：
 
-![image-20230801141606690](https://img.bald3r.wang/img/image-20230801141606690.png)
+![image-20230801141606690](https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/image-20230801141606690.png)
 
 我们删除该行代码，改为在`app.module.ts`中注册：
 
@@ -339,7 +329,7 @@ import { HttpExceptionFilter } from './global/filter/http-exception/http-excepti
       useClass: JwtAuthGuard,
     },
     {
-      provide: APP_FILTER,							// 在这里注册
+      provide: APP_FILTER,       // 在这里注册
       useClass: HttpExceptionFilter,
     },
   ],
@@ -377,8 +367,6 @@ curl --location --request GET 'http://localhost:3000/user/1'
 ```
 
 可以看到，错误也正确的记录了下来。
-
-
 
 ## 改造响应拦截器
 
@@ -462,7 +450,7 @@ import { TransformInterceptor } from './global/interceptor/transform/transform.i
       useClass: HttpExceptionFilter,
     },
     {
-      provide: APP_INTERCEPTOR,						// 在这里注册
+      provide: APP_INTERCEPTOR,      // 在这里注册
       useClass: TransformInterceptor,
     },
   ],
@@ -488,8 +476,6 @@ export class AppModule implements NestModule {
 ```
 
 可以看到这次请求的信息和响应的信息都符合预期的记录在了文件中。
-
-
 
 ## 美化 log
 
@@ -587,17 +573,12 @@ import { format, transports } from 'winston';
 
 这样美化有利有弊，大家可以根据实际情况酌情选择。
 
-
-
 ## 后记
 
 本系列文章到这里算是完结了，不论是 NestJS 还是本系列文章中提到的各种工具，都有着非常多的功能，笔者也只是一个初学者，也只是浅尝辄止的进行了学习，并分享给大家，后面笔者也会继续分享其他内容。如果有可以改进的地方，欢迎和我交流，如果有错误，还请大家斧正。
-
-
 
 [Nest学习系列博客代码仓库 (github.com)](https://github.com/baIder/nest-demo)
 
 [冷面杀手的个人站 (bald3r.wang)](https://bald3r.wang/)
 
 [NestJS 相关文章](https://bald3r.wang/tags/NestJS/)
-

@@ -39,9 +39,9 @@ yarn global add bald3r-node-cli-translator
 
 在构造查询参数时，以前常用的`querystring.stringify()`已经噶了，在node14时弃用了，
 
-![](https://img.bald3r.wang/img/20220807220726.png)
+![](https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/20220807220726.png)
 
-![](https://img.bald3r.wang/img/20220807220523.png)
+![](https://balder-wang-images.oss-cn-shanghai.aliyuncs.com/img/20220807220523.png)
 
 网上有很多教程教你怎么关闭编辑器的弃用提示，我个人还是比较喜欢尝新的，因此选用了node推荐的`URLSearchParams`
 
