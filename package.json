@@ -12,7 +12,7 @@
     "version": "7.1.1"
   },
   "dependencies": {
-    "hexo": "^7.1.1",
+    "hexo": "^7.3.0",
     "hexo-admonition": "^1.1.2",
     "hexo-deployer-git": "^4.0.0",
     "hexo-deployer-rsync": "^3.0.0",
@@ -26,8 +26,8 @@
     "hexo-renderer-markdown-it": "^7.1.1",
     "hexo-renderer-stylus": "^3.0.1",
     "hexo-server": "^3.0.0",
-    "hexo-theme-fluid": "^1.9.7",
-    "hexo-theme-landscape": "^1.0.0",
+    "hexo-theme-fluid": "^1.9.8",
+    "hexo-theme-landscape": "^1.1.0",
     "markdown-it-checkbox": "^1.1.0",
     "markdown-it-expandable": "^1.0.2"
   }
